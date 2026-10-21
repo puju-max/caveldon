@@ -1,9 +1,0 @@
----
-/** Structured data for search engines and AI assistants. Rendered only on live builds with PUBLIC_SITE_URL set. */
-import { isLive } from '../data/site';
-interface Props { data: Record<string, unknown> | Record<string, unknown>[]; }
-const { data } = Astro.props;
-const siteUrl = (import.meta.env.PUBLIC_SITE_URL || '').trim();
-const json = isLive && siteUrl ? JSON.stringify(data) : '';
----
-{json && <script type="application/ld+json" set:html={json} />}

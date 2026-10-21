@@ -1,7 +1,0 @@
----
-/** Shows a value from src/data/site.ts. If it is empty: an amber placeholder in prelaunch, nothing when live. */
-import { isLive } from '../data/site';
-interface Props { value?: string; label: string; }
-const { value, label } = Astro.props;
----
-{value ? <Fragment set:text={value} /> : !isLive && <span class="ph">[{label}]</span>}
