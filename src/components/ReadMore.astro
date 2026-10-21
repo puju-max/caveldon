@@ -1,0 +1,58 @@
+---
+/**
+ * Progressive disclosure — a "read more" block.
+ *
+ * Long content on a landing page is the classic scroll killer: the reader reaches
+ * the bottom and cannot find the button. The fix is not shorter writing, it is
+ * letting the reader choose depth.
+ *
+ * Three behaviours, one component:
+ *   1. Collapsed by default. The summary is always visible.
+ *   2. Expands in place — the page does not jump, the reader keeps their place.
+ *   3. "Read the full version" opens the same content in its own page, so the
+ *      detail is linkable, shareable and indexable.
+ */
+interface Props {
+  /** Visible when collapsed. One or two sentences. */
+  summary: string;
+  /** Optional label for the expand control. */
+  label?: string;
+  /** Link to the full article. Rendered as a separate secondary action. */
+  href?: string;
+  hrefLabel?: string;
+  /** Optional eyebrow above the summary. */
+  eyebrow?: string;
+  class?: string;
+}
+const {
+  summary,
+  label = 'Read more',
+  href,
+  hrefLabel = 'Read the full version',
+  eyebrow,
+  class: className = '',
+} = Astro.props;
+---
+
+<details class={`readmore ${className}`}>
+  <summary>
+    <span class="readmore-summary">
+      {eyebrow && <span class="label readmore-eyebrow">{eyebrow}</span>}
+      <span class="readmore-text">{summary}</span>
+    </span>
+    <span class="readmore-toggle" aria-hidden="true">
+      <span class="readmore-label">{label}</span>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path class="readmore-chev" d="M3 5.5L7 9.5L11 5.5" />
+      </svg>
+    </span>
+  </summary>
+  <div class="readmore-body">
+    <slot />
+    {href && (
+      <a class="link readmore-link" href={href}>
+        {hrefLabel} <span aria-hidden="true">→</span>
+      </a>
+    )}
+  </div>
+</details>

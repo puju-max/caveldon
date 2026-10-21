@@ -1,0 +1,32 @@
+---
+import BrandMark from './BrandMark.astro';
+import { visibleInsights } from '../lib/content';
+const path = Astro.url.pathname;
+const hasInsights = (await visibleInsights()).length > 0;
+const links = [
+  { href: '/services/', label: 'Services' },
+  { href: '/setup/', label: 'Cloud Setup' },
+  { href: '/checklist/', label: 'Checklist' },
+  { href: '/experience/', label: 'Experience' },
+  { href: '/work/', label: 'Engineering Lab' },
+  ...(hasInsights ? [{ href: '/insights/', label: 'Insights' }] : []),
+  { href: '/about/', label: 'About' },
+];
+const current = (href: string) => (href !== '/#how' && path.startsWith(href) ? 'page' : undefined);
+---
+<header class="site-header">
+  <div class="wrap nav-row">
+    <a class="brand" href="/" aria-label="CAVELDON home"><BrandMark /><span>CAVELDON<span class="brand-stop" aria-hidden="true">.</span></span></a>
+    <nav class="nav-links" aria-label="Main">
+      {links.map(l => <a href={l.href} aria-current={current(l.href)}>{l.label}</a>)}
+    </nav>
+    <a class="btn btn-solid btn-sm" href="/contact/">Contact Us <span class="arr" aria-hidden="true">→</span></a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="mobile-nav" aria-expanded="false" aria-label="Open menu"><span></span><span></span></button>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile" hidden>
+    <div class="wrap">
+      {links.map(l => <a href={l.href} aria-current={current(l.href)}>{l.label}<span aria-hidden="true">→</span></a>)}
+      <a class="btn btn-solid" href="/contact/">Contact Us <span aria-hidden="true">→</span></a>
+    </div>
+  </nav>
+</header>

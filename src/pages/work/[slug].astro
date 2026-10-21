@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBlock from '../../components/CtaBlock.astro';
+import StudyDiagram from '../../components/diagrams/StudyDiagram.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { breadcrumbSchema } from '../../lib/schema';
+import { studies } from '../../data/work.js';
+export function getStaticPaths() {
+  return studies.map(study => ({ params: { slug: study.slug }, props: { study } }));
+}
+const { study } = Astro.props;
+const ix = studies.findIndex(x => x.slug === study.slug);
+const next = studies[(ix + 1) % studies.length];
+---
+<BaseLayout title={study.title} description={study.summary}>
+  <JsonLd data={breadcrumbSchema([{ name: 'Work', path: '/work/' }, { name: study.title, path: `/work/${study.slug}/` }])} />
+  <section class="page-hero gridpaper">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/work/">Work</a><span aria-hidden="true">/</span><span>Design {study.number}</span></nav>
+      <p class="eyebrow">{study.category}</p>
+      <h1 style="max-width:22ch">{study.title}</h1>
+      <p class="lead">{study.summary}</p>
+      <p class="status" style="margin-top:22px">{study.label}</p>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-label="Architecture diagram">
+    <div class="wrap">
+      <figure class="frame" style="margin:0">
+        <div class="frame-cap"><span>Fig. {study.number} · Reference design</span><span>Conceptual</span></div>
+        <div class="diag-scroll"><StudyDiagram slug={study.slug} label={study.diagramAlt} /></div>
+        <p class="swipe-hint">Swipe to see the full diagram →</p>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="problem-title">
+    <div class="wrap two-col">
+      <div>
+        <p class="eyebrow">The problem</p>
+        <h2 id="problem-title">Why this matters.</h2>
+        <p class="lead" style="margin-top:18px">{study.buyer}</p>
+      </div>
+      <div class="cells cols-1" style="grid-template-columns:1fr">
+        <div><span class="label">The situation</span><p style="margin-top:8px;color:var(--ink-2)">{study.situation}</p></div>
+        <div><span class="label">The goal</span><p style="margin-top:8px;color:var(--ink-2)">{study.outcome}</p></div>
+        <div><span class="label">Technical scope</span><div class="tags">{study.stack.map(t => <span class="chip">{t}</span>)}</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="approach-title">
+    <div class="wrap">
+      <div class="sec-head"><div><p class="eyebrow">The approach</p><h2 id="approach-title">Four design principles.</h2></div></div>
+      <div class="cells cols-4">
+        {study.principles.map((p, i) => <div><span class="cell-num">0{i + 1}</span><h3 style="margin:12px 0 8px">{p.name}</h3><p style="color:var(--ink-2);font-size:16px">{p.text}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="decisions-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow">The judgement calls</p><h2 id="decisions-title">Trade-offs, not just tools.</h2></div>
+        <p class="intro">Every choice has a cost. Here is what each decision buys, and what we’d check before committing to it.</p>
+      </div>
+      <div class="decisions">
+        {study.decisions.map((d, i) => (
+          <article class="decision">
+            <span class="cell-num">0{i + 1}</span>
+            <div>
+              <h3>{d.decision}</h3>
+              <div class="decision-cols">
+                <div><span class="label" style="color:var(--accent-ink)">Why it can fit</span><p>{d.reason}</p></div>
+                <div><span class="label">What we’d check</span><p>{d.tradeoff}</p></div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="proof-title">
+    <div class="wrap two-col">
+      <div>
+        <p class="eyebrow">Proving it</p>
+        <h2 id="proof-title">How we’d validate it.</h2>
+        <p class="intro" style="margin-top:18px">This is the test plan, not a record of tests already run.</p>
+        <div class="cells" style="grid-template-columns:1fr;margin-top:28px">
+          {study.evidence.map(e => <div><span class="label">Evidence</span><h3 style="margin:8px 0 6px;font-size:18px">{e.title}</h3><p style="color:var(--ink-2);font-size:15.5px">{e.detail}</p></div>)}
+        </div>
+      </div>
+      <div>
+        <ol class="numbered">{study.validation.map(step => <li>{step}</li>)}</ol>
+        <div class="callout" style="margin-top:28px"><strong>What this is and isn’t:</strong> {study.boundary} <br/><br/><strong>Next milestone:</strong> {study.next}</div>
+        <p style="margin-top:20px"><a class="link" href={study.note} download>Download the engineering note (.md) <span aria-hidden="true">↓</span></a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt section--tight" aria-label="Next design">
+    <div class="wrap">
+      <a class="row" href={`/work/${next.slug}/`} style="border-top:1px solid var(--line-2)">
+        <span class="cell-num">NEXT</span>
+        <div><h3>{next.title}</h3><p>{next.category}</p></div>
+        <span class="arr" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <CtaBlock title="Facing a problem like this one?" />
+</BaseLayout>

@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { analytics } from '../../data/site';
+import { breadcrumbSchema } from '../../lib/schema';
+
+const contactEmail = (import.meta.env.PUBLIC_CONTACT_EMAIL || '').trim();
+const analyticsNames: Record<string, string> = {
+  plausible: 'Plausible Analytics',
+  umami: 'Umami',
+  cloudflare: 'Cloudflare Web Analytics',
+};
+const analyticsName = analyticsNames[analytics.provider];
+---
+<BaseLayout title="Privacy Notice" description="How CAVELDON handles website visits, contact inquiries, analytics and personal information.">
+  <JsonLd data={breadcrumbSchema([{ name: 'Privacy', path: '/privacy/' }])} />
+  <section class="page-hero gridpaper">
+    <div class="wrap narrow">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Privacy</span></nav>
+      <p class="eyebrow">Privacy</p>
+      <h1>Privacy notice.</h1>
+      <p class="lead">This notice explains what information the CAVELDON website may process, why it is used, and the choices available to you.</p>
+      <p class="status" style="margin-top:22px">Last updated · 14 October 2026</p>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Privacy notice">
+    <div class="wrap narrow prose">
+      <h2>Who is responsible</h2>
+      <p>CAVELDON is responsible for personal information submitted through this website. For privacy questions or requests, use the <a href="/contact/">Contact page</a>{contactEmail ? <> or email <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.</> : '.'}</p>
+
+      <h2>Information we process</h2>
+      <p>If you send an inquiry, we process the name, work email address, service area, message and consent confirmation you provide. Please do not submit passwords, access keys, customer records, health information, payment-card data or other sensitive information.</p>
+      <p>When the contact form is enabled, Cloudflare Turnstile also processes technical request information, including the challenge token and IP address, to help identify automated abuse. The website sends accepted inquiries to CAVELDON by email and does not store them in an application database.</p>
+
+      <h2>Why we use it</h2>
+      <p>Inquiry information is used to review and reply to your request, assess whether the proposed work is a suitable fit, keep necessary business correspondence, protect the inquiry service, and meet applicable legal obligations. Depending on applicable law, this processing is based on steps requested before a contract, legitimate business interests, consent, or legal obligations.</p>
+
+      <h2>Hosting, security and service providers</h2>
+      <p>Hosting, content-delivery, security and email providers may process limited technical information such as IP address, requested URL, timestamp, browser information and security events. The planned contact service uses AWS infrastructure and Amazon SES for email delivery. Cloudflare Turnstile is used for spam protection when the online form is active.</p>
+      {analyticsName
+        ? <p>This site is configured to use {analyticsName} for aggregate website measurement. The implementation is intended to avoid advertising profiles and does not intentionally collect inquiry-message contents.</p>
+        : <p>No analytics provider is currently configured. If privacy-conscious analytics is enabled, this notice will identify the provider and explain any material change in processing.</p>}
+
+      <h2>Retention</h2>
+      <p>Inquiry emails and related business correspondence are kept only as long as reasonably needed to respond, manage a potential or active customer relationship, maintain security records, resolve disputes, and meet legal obligations. Provider logs follow the retention settings and terms of the relevant hosting, security and email services.</p>
+
+      <h2>International processing</h2>
+      <p>Cloud and email providers may process information in countries other than your own. Where applicable, CAVELDON will use provider commitments and legally recognized safeguards appropriate to the service and the information involved.</p>
+
+      <h2>Your choices and rights</h2>
+      <p>Depending on where you live, you may have rights to request access, correction, deletion, restriction, objection, portability, or withdrawal of consent. Contact CAVELDON to make a request. You may also complain to the privacy or data-protection authority that applies where you live.</p>
+
+      <h2>External links and changes</h2>
+      <p>External websites and booking services apply their own privacy notices. This notice may be updated when the website, providers or legal requirements change. The latest revision date appears at the top of this page.</p>
+    </div>
+  </section>
+</BaseLayout>

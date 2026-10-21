@@ -1,0 +1,8 @@
+---
+import { bookHref, bookIsExternal } from '../data/site';
+interface Props { variant?: 'solid' | 'ghost' | 'light'; size?: 'sm' | 'md'; label?: string; }
+const { variant = 'solid', size = 'md', label = 'Discuss your project' } = Astro.props;
+---
+<a class:list={['btn', `btn-${variant}`, size === 'sm' && 'btn-sm']} href={bookHref} data-track="Book call" {...(bookIsExternal ? { target: '_blank', rel: 'noopener' } : {})}>
+  {label} <span class="arr" aria-hidden="true">→</span>
+</a>

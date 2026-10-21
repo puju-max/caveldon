@@ -1,0 +1,149 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookButton from '../../components/BookButton.astro';
+import CtaBlock from '../../components/CtaBlock.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { site } from '../../data/site';
+import { soc2Faqs } from '../../data/faq';
+import { breadcrumbSchema, faqSchema, serviceSchema } from '../../lib/schema';
+const offer = site.offer;
+
+const controls = [
+  { area: 'Access', look: 'Every person has a named account with MFA, only the access they need, and loses it the day they leave.',
+    build: 'Single sign-on, MFA, named accounts, least-privilege roles and documented access reviews.', tsc: 'CC6.1 · CC6.2 · CC6.3' },
+  { area: 'Logging & monitoring', look: 'Activity in your cloud is recorded, kept, and someone is alerted when something unusual happens.',
+    build: 'Centralized cloud activity logs, protected retention, configuration monitoring and actionable security alerts.', tsc: 'CC7.2 · CC7.3' },
+  { area: 'Encryption', look: 'Customer data is encrypted at rest and in transit, and nothing is accidentally public.',
+    build: 'Encryption for data at rest and in transit, controlled key access and reviews of publicly exposed resources.', tsc: 'CC6.1 · CC6.7' },
+  { area: 'Change management', look: 'Changes to production are reviewed, tested, approved and traceable.',
+    build: 'Infrastructure as code, branch protection, required approvals, deploys only from the pipeline, separate production and staging accounts.', tsc: 'CC8.1' },
+  { area: 'Backup & recovery', look: 'Backups exist, and you have proof that you can actually restore from them.',
+    build: 'Backup policies, scheduled restoration tests with recorded results and a documented recovery process.', tsc: 'A1.2 · A1.3' },
+  { area: 'Vulnerabilities', look: 'Known vulnerabilities are found and fixed within a defined time.',
+    build: 'Vulnerability scanning for workloads and dependencies, agreed remediation timelines and traceable findings.', tsc: 'CC7.1' },
+];
+---
+<BaseLayout title="Cloud Security & SOC 2 Technical Readiness" description="What SOC 2 readiness involves for cloud-hosted software: technical controls, evidence, Type I versus Type II, and the boundaries of engineering support.">
+  <JsonLd data={[
+    breadcrumbSchema([{ name: 'SOC 2 readiness', path: '/soc-2/' }]),
+    serviceSchema('SOC 2 cloud technical readiness', 'Engineering support for cloud access, logging, encryption, change management, backups and vulnerability management, with technical evidence for an independent assessor.', '/soc-2/'),
+    faqSchema(soc2Faqs),
+  ]} />
+
+  <section class="page-hero gridpaper">
+    <div class="wrap page-hero-grid">
+      <div>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>SOC 2 readiness</span></nav>
+        <p class="eyebrow">Cloud technical controls &amp; SOC 2 readiness</p>
+        <h1>SOC 2 readiness, explained through cloud engineering.</h1>
+        <p class="lead">SOC 2 is an independent assurance report about a service organization’s controls. We explain where cloud engineering supports technical readiness and evidence, without implying the engineering work produces the report.</p>
+        <div class="actions"><BookButton /><a class="btn btn-ghost" href="#controls">See the technical controls <span class="arr" aria-hidden="true">↓</span></a></div>
+      </div>
+      <aside class="frame answer-box" aria-label="Short answer">
+        <div class="frame-cap"><span>Short answer</span><span>30-second read</span></div>
+        <p>A technical readiness effort may include <strong>named access with MFA</strong>, <strong>account-wide logging</strong>, <strong>encryption</strong>, <strong>tested backups</strong>, <strong>reviewed deployments</strong>, and evidence that all of it keeps working.</p>
+        <p>A compliance platform tracks it. An engineer has to build it. An independent CPA firm checks it and writes the report.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="when-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow">When you need it</p><h2 id="when-title">It usually starts with a deal.</h2></div>
+        <p class="intro">Few SaaS companies pursue SOC 2 for its own sake. One of these usually forces the question.</p>
+      </div>
+      <div class="cells cols-3">
+        <div><span class="cell-num">TRIGGER</span><h3 style="margin:12px 0 8px">“Can you send your SOC 2 report?”</h3><p style="color:var(--ink-2);font-size:16px">An enterprise prospect’s procurement team won’t move forward without one.</p></div>
+        <div><span class="cell-num">TRIGGER</span><h3 style="margin:12px 0 8px">A 200-question security questionnaire</h3><p style="color:var(--ink-2);font-size:16px">You can answer some honestly today. The rest need real changes first.</p></div>
+        <div><span class="cell-num">TRIGGER</span><h3 style="margin:12px 0 8px">Your platform is full of red checks</h3><p style="color:var(--ink-2);font-size:16px">You bought Vanta, Drata or Secureframe. Now someone has to fix what it found.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="types" aria-labelledby="types-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow">Type I vs Type II</p><h2 id="types-title">Two reports, two different questions.</h2></div>
+        <p class="intro">Type I asks “are the controls designed properly?” Type II asks “did they actually work, every day, for months?”</p>
+      </div>
+      <ol class="timeline" aria-label="Typical SOC 2 timeline">
+        <li><span class="tl-bar"></span><span class="label">Weeks</span><h3>Readiness</h3><p>Assess gaps, improve cloud and delivery controls, and begin collecting appropriate evidence.</p></li>
+        <li><span class="tl-bar tl-point"></span><span class="label">One date</span><h3>Type I report</h3><p>The auditor checks your controls are designed properly at a single point in time.</p></li>
+        <li class="tl-wide"><span class="tl-bar tl-dash"></span><span class="label">Usually 3–12 months</span><h3>Observation window</h3><p>Your controls run for real. Access reviews happen, logs are kept, backups are tested, changes are reviewed.</p></li>
+        <li><span class="tl-bar tl-point"></span><span class="label">After the window</span><h3>Type II report</h3><p>The auditor samples evidence from the whole window. This is the report most enterprise buyers want.</p></li>
+      </ol>
+      <p class="caveat">Timelines vary with your starting point, your auditor and your buyers. The {offer.name} gives you a realistic plan before you commit to dates.</p>
+    </div>
+  </section>
+
+  <section class="section" id="controls" aria-labelledby="controls-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow">What technical engineering addresses</p><h2 id="controls-title">Six common technical control areas and engineering approaches.</h2></div>
+        <p class="intro">Where appropriate, infrastructure changes are codified, reviewed and monitored over time. Formal control operation and auditor evaluation remain separate responsibilities.</p>
+      </div>
+      <div class="ctl" role="table" aria-label="SOC 2 control areas and cloud engineering measures">
+        <div class="ctl-row ctl-head" role="row"><span role="columnheader">Area</span><span role="columnheader">What the auditor looks for</span><span role="columnheader">Relevant technical measures</span><span role="columnheader">SOC 2 criteria</span></div>
+        {controls.map(c => (
+          <div class="ctl-row" role="row">
+            <h3 role="rowheader">{c.area}</h3>
+            <p role="cell"><span class="ctl-k">Auditor looks for</span>{c.look}</p>
+            <p role="cell"><span class="ctl-k">We build</span>{c.build}</p>
+            <span role="cell" class="ctl-tsc"><span class="ctl-k">Criteria</span>{c.tsc}</span>
+          </div>
+        ))}
+      </div>
+      <p class="caveat">Criteria refer to the AICPA 2017 Trust Services Criteria (points of focus revised 2022). Your auditor decides the final mapping for your scope.</p>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="split-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow">Who does what</p><h2 id="split-title">Your platform finds it. We fix it. Your auditor checks it.</h2></div>
+      </div>
+      <div class="split split-3">
+        <div><span class="label">Compliance platform</span><p>Connects to cloud services, runs automated tests, tracks policies and collects evidence. Examples: Vanta, Drata, Secureframe.</p></div>
+        <div><span class="label" style="color:var(--accent-ink)">CAVELDON</span><p>Helps implement relevant technical controls in access, logging, encryption, delivery and recovery. Validation and production risk are managed within the agreed project scope.</p></div>
+        <div><span class="label">Your auditor</span><p>A licensed CPA firm examines the controls and evidence, and issues the SOC 2 report. Independent of us, by design.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="engage-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow">How we get you ready</p><h2 id="engage-title">Defined scope at every step.</h2></div>
+        <p class="intro">You can stop after any step. Most of the cost risk is removed by step two.</p>
+      </div>
+      <ol class="cells cols-4" style="list-style:none;padding:0;margin:0">
+        <li><span class="cell-num">01 · INTRODUCTION</span><h3 style="margin:12px 0 8px">30-minute call</h3><p style="color:var(--ink-2);font-size:16px">What is the deal or auditor asking for, and by when?</p></li>
+        <li><span class="cell-num">02 · {(offer.price || 'SCOPED REVIEW').toUpperCase()}</span><h3 style="margin:12px 0 8px">{offer.name}</h3><p style="color:var(--ink-2);font-size:16px">An agreed review of cloud configuration, access and delivery controls can produce a prioritized list of technical observations and evidence gaps.</p></li>
+        <li><span class="cell-num">03 · FIXED SCOPE</span><h3 style="margin:12px 0 8px">Remediation</h3><p style="color:var(--ink-2);font-size:16px">We fix the gaps in code and hand over evidence and documentation.</p></li>
+        <li><span class="cell-num">04 · BY AGREEMENT</span><h3 style="margin:12px 0 8px">Audit-window support</h3><p style="color:var(--ink-2);font-size:16px">Optional help monitoring and remediating technical findings during an agreed review period; no audit outcome is guaranteed.</p></li>
+      </ol>
+      <p class="aside-note"><span class="label">Working with regulated data or customers?</span> Additional framework requirements may apply depending on your organization, data and geography. <a class="link" href="/services/security-compliance/">Explore regulated workload engineering</a></p>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="faq" aria-labelledby="faq-title">
+    <div class="wrap faq-grid">
+      <div>
+        <p class="eyebrow">SOC 2 questions</p>
+        <h2 id="faq-title">Plain answers to common questions.</h2>
+        <p class="intro" style="margin-top:18px">Have a question that isn’t here? Ask it on the call.</p>
+      </div>
+      <div class="faq">
+        {soc2Faqs.map((f, i) => (
+          <details open={i === 0}>
+            <summary>{f.q}</summary>
+            <div class="answer">{f.a.map(t => <p>{t}</p>)}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBlock title="Preparing for a customer security review?" text="Tell us about the technical requirements without sharing confidential evidence through the inquiry form. We can discuss an appropriate review scope." />
+</BaseLayout>

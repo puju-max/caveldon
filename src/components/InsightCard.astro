@@ -1,0 +1,16 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { categoryLabels } from '../lib/content';
+interface Props { post: CollectionEntry<'insights'>; index: number; }
+const { post, index } = Astro.props;
+const d = post.data;
+---
+<a class="post" href={`/insights/${post.id}/`} data-category={d.category}>
+  <div class="post-art" aria-hidden="true">{String(index + 1).padStart(2, '0')} · {d.visualLabel}</div>
+  <div class="post-body">
+    <span class="label">{categoryLabels[d.category]} · {d.readMinutes} min read{d.draft && <span class="draft-badge"> · Draft</span>}</span>
+    <h3>{d.title}</h3>
+    <p>{d.cardDescription}</p>
+    <span class="go">Read the guide <span aria-hidden="true">→</span></span>
+  </div>
+</a>

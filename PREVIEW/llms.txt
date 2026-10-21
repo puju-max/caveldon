@@ -1,0 +1,46 @@
+# CAVELDON
+
+> Cloud and DevOps agency for startups and SaaS companies on AWS: cloud setup, DevOps, security and SOC 2, reliability, cost optimisation and AI infrastructure.
+
+CAVELDON is a cloud and DevOps agency for startups and SaaS companies in the US, UK and EU, mainly on AWS. Services: cloud setup, DevOps and CI/CD, security and SOC 2, reliability, cloud cost optimisation, and AI infrastructure and operations, as fixed-price projects or a monthly DevOps plan. The engineer who scopes a project also delivers it. The usual first engagement is the Cloud Readiness Review, a fixed-price review (1–2 weeks) that produces a ranked plan; security findings are mapped to SOC 2 criteria. CAVELDON implements controls and prepares evidence; it does not issue SOC 2 reports, certifications or legal advice.
+
+## Services
+- [Services](/services/): cloud setup, DevOps & CI/CD, security & SOC 2, reliability, cost optimisation, AI infrastructure & operations, and a monthly DevOps plan
+- [For startups](/startups/): cloud setup from day one and readiness for investors' technical due diligence
+- [SOC 2 readiness on AWS](/soc-2/): what SOC 2 involves on AWS, Type I vs Type II, and the controls we build
+- [Regulated customers](/services/security-compliance/): HIPAA, PCI DSS, DORA and GDPR for SaaS selling to healthcare and finance
+
+## Reference designs
+- [A cloud platform designed for safer change.](/work/cloud-production-architecture/): A reference architecture for running a web API on AWS with repeatable releases, clear access boundaries, and observable failure modes.
+- [Security controls need evidence, not just intentions.](/work/governance-control-evidence/): A cloud-control reference model showing how policy, identity, configuration checks and operational evidence can support audit readiness.
+- [Make infrastructure efficient without making it fragile.](/work/cost-reliability-engineering/): A practical measurement-first framework for balancing cloud spend, performance, availability and the time teams spend operating systems.
+
+## Guides
+- [Elastic Beanstalk or ECS: when is migration worth considering?](/insights/elastic-beanstalk-vs-ecs/): A practical decision framework for production AWS teams, without assuming one service is always better.
+- [An AWS production-readiness checklist for growing teams](/insights/aws-production-readiness/): The operational questions every production system deserves: deployability, detection, recovery and ownership.
+- [Making AWS deployments more repeatable](/insights/repeatable-aws-deployments/): How to reason about builds, permissions, change controls, and rollback without tool-first decisions.
+- [Cloud governance, compliance and audit readiness: what is the difference?](/insights/cloud-governance-and-audit-readiness/): A precise distinction between engineering guardrails, compliance obligations, and independent audit work.
+
+## Common questions
+- Do we need to know exactly what we need? No. Most people come with a symptom: “deploys are scary”, “the AWS bill doubled”, “an investor asked about security”, “a customer sent a questionnaire”. Working out the cause is our job.
+- We’re an early-stage startup. Is this overkill? No. Setting up the cloud properly at the start costs far less than fixing it after you grow. For early teams we keep it lean: the essentials for security, deployments and cost, and nothing you won’t use yet. If you have AWS startup credits, we help you spend them on the right things.
+- Can you be our DevOps team? Yes. Most startups can’t justify a full-time DevOps or cloud engineer early on. Our monthly plan gives you a set amount of senior engineering time each month for improvements, releases, reviews and help when something breaks. When you’re ready to hire, we help you hire and hand over.
+- How much does it cost? The first call is free. The Cloud Readiness Review is a fixed price, agreed in writing before we start, based on the size of your setup. Projects are quoted at a fixed price and the monthly DevOps plan is a fixed monthly fee, so there are no open-ended hourly bills.
+- Who will actually work on our systems? The engineer who scopes your project stays on it and does the hands-on work. If another engineer joins, you meet them first. The founder oversees every engagement. Access uses dedicated roles you can revoke at any time, and it is removed when the work ends.
+- Will you need access to our AWS account? For the review, read-only access is enough. You create a dedicated role for us and can remove it at any time. We never ask for root credentials, passwords or customer data, and we’re happy to sign your NDA first.
+- Can you make us SOC 2 certified? There’s no such thing as a SOC 2 certificate. A licensed CPA firm examines your controls and issues a report. We do the engineering: put the controls in place in AWS and your pipelines, and prepare the evidence the auditor will sample.
+- Do you work in our time zone? Calls are scheduled at times that suit you.
+- What do investors check in technical due diligence? Usually five things: whether the platform is reasonably secure, whether it can handle growth, what the cloud costs and why, whether more than one person can run it, and whether the company (not a contractor or a founder’s personal account) owns the code, cloud accounts and domains.
+- When does technical due diligence usually happen? Most often from Series A onwards, and earlier for deeply technical products. Earlier rounds focus more on team and market, but investors still ask basic questions about security and who controls the code and cloud accounts.
+- We’re pre-seed. What’s the minimum cloud setup we need? Company-owned AWS accounts with separate production and staging, single sign-on with MFA, infrastructure as code, an automated deployment pipeline, backups you have tested once, and budget alerts. That foundation is quick to set up and saves months of rework later.
+- Can you help us use AWS startup credits wisely? Yes. Credits run out, and the architecture you build on them stays. We help you spend them on a setup that will still be affordable when you start paying full price.
+- Can you be our DevOps team until we hire one? Yes. That’s what the monthly plan is for. When you’re ready to hire, we help write the role, interview candidates and hand over everything, documented.
+- What is SOC 2, in plain English? SOC 2 is a report from an independent CPA firm that says how well a service company protects its customers’ data. It’s based on the AICPA’s Trust Services Criteria. Security is always included; availability, confidentiality, processing integrity and privacy are optional.
+- What’s the difference between SOC 2 Type I and Type II? Type I checks that your controls are designed properly at a single point in time. Type II checks that they worked consistently over an observation period, usually 3 to 12 months. Many startups get a Type I first to unblock deals, then move to Type II.
+- How long does it take to get SOC 2-ready on AWS? It depends on where you start. A team with single sign-on, infrastructure as code and reviewed deployments might need a few weeks of fixes. A team with shared admin logins and manual deploys needs longer. The readiness review gives you a realistic plan before you commit to an audit date.
+- Which AWS changes come up most often? Single sign-on with MFA instead of shared IAM users, an organization-wide CloudTrail with long retention, AWS Config and GuardDuty turned on, encryption on databases and storage, tested backups, separate production and staging accounts, and code review required before anything reaches production.
+- Do compliance platforms replace this work? No. Platforms like Vanta, Drata and Secureframe connect to AWS, test your settings and collect evidence. When a test fails, an engineer has to change the infrastructure. We do those changes, in code, so they stay fixed.
+- We sell to hospitals or banks. What changes? Their security reviews go further than SOC 2. Healthcare buyers may ask about HIPAA safeguards and a business associate agreement; financial buyers may ask about PCI DSS, or DORA if they’re in the EU. The engineering foundation is the same, with stricter access, logging and data controls on top.
+
+## Contact
+- [Book a free 30-minute call or send a message](/contact/)

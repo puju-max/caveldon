@@ -1,0 +1,69 @@
+---
+import Fill from './Fill.astro';
+import BrandMark from './BrandMark.astro';
+import { site, isLive } from '../data/site';
+const f = site.founder;
+const certs = f.certifications.filter(Boolean);
+// In prelaunch every row shows (with placeholders). On a live build, empty rows are left out.
+const show = (v: string | string[]) => (Array.isArray(v) ? v.length > 0 : Boolean(v)) || !isLive;
+// The portrait slot always renders: with a real photo it shows the photo, in
+// prelaunch it shows a note to the site owner, and on a live build it shows a
+// designed panel. A slot that vanishes looks like an omission.
+const hasRealPhoto = Boolean(f.photo);
+// Initials for the mark when there is no photo. Falls back to the brand mark.
+const initials = f.name
+  ? f.name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase()
+  : 'C—';
+---
+<div class="founder">
+  <div class="frame photo">
+    {hasRealPhoto
+      ? <img src={f.photo} alt={f.name ? `${f.name}, ${f.role}` : f.role} width="680" height="850" loading="lazy" />
+      : !isLive
+      ? (
+        /* Prelaunch only: a note to the site owner. This never reaches a visitor. */
+        <div class="photo-ph">
+          <span class="photo-initials" aria-hidden="true">{initials}</span>
+          <span class="photo-cta">
+            <b>Founder-led, one accountable team.</b><br />
+            A real portrait here measurably increases trust with
+            buyers who are handing over production infrastructure.
+            Add <code>founder.photo</code> in <code>src/data/site.ts</code>.
+          </span>
+        </div>
+      )
+      : (
+        /* Live build, no portrait yet. The slot stays — it is part of the layout
+           and a photo slot that disappears looks like an omission. But it must
+           look deliberate to a visitor, so it carries the brand mark and a
+           plain statement rather than a note about missing files. */
+        <div class="photo-ph photo-ph--live">
+          <BrandMark class="photo-mark" />
+          <span class="photo-initials" aria-hidden="true">{initials}</span>
+          <span class="photo-cta">
+            <b>Founder-led. One accountable team.</b><br />
+            {f.name ? `${f.name} works directly with every client, on the systems they hand over.` : 'The person who scopes the work is the person who does the work.'}
+          </span>
+        </div>
+      )}
+  </div>
+  <div>
+    {show(f.name) && <h3 class="h2" style="font-size:clamp(28px,3vw,38px)"><Fill value={f.name} label="Your full name" /></h3>}
+    <p style="color:var(--accent-ink);font-weight:600;margin-top:8px">{f.role}</p>
+    {show(f.bio) && <p class="bio"><Fill value={f.bio} label="2–3 sentences: what you've built and run in production, and what you care about. Real facts only." /></p>}
+    <dl class="facts">
+      {show(f.experience) && <div><dt>Experience</dt><dd><Fill value={f.experience} label="e.g. 9 years running production systems on AWS and Azure" /></dd></div>}
+      {show(certs) && <div><dt>Certifications</dt><dd>{certs.length ? certs.join(' · ') : <Fill label="e.g. AWS Solutions Architect – Professional" />}</dd></div>}
+      {show(f.industries) && <div><dt>Industries</dt><dd>{f.industries.length ? f.industries.join(' · ') : <Fill label="Industries you have worked in" />}</dd></div>}
+      {show(f.location) && <div><dt>Based in</dt><dd><Fill value={f.location} label="City, Country" /></dd></div>}
+      <div><dt>Approach</dt><dd>Founder-led engineering, with scope and responsibilities agreed for each project.</dd></div>
+    </dl>
+    {show(f.linkedin) && (
+      <div class="actions">
+        {f.linkedin
+          ? <a class="btn btn-ghost btn-sm" href={f.linkedin} target="_blank" rel="noopener" data-track="LinkedIn click">View LinkedIn profile <span class="arr" aria-hidden="true">↗</span></a>
+          : <span class="ph">[LinkedIn URL]</span>}
+      </div>
+    )}
+  </div>
+</div>

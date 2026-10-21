@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BookButton from '../../../components/BookButton.astro';
+import CtaBlock from '../../../components/CtaBlock.astro';
+import JsonLd from '../../../components/JsonLd.astro';
+import { breadcrumbSchema, serviceSchema } from '../../../lib/schema';
+
+const controls = [
+  ['ACCESS', 'Identity & privilege', 'Role boundaries, least privilege, MFA and single sign-on, service identities and regular access reviews.'],
+  ['DATA', 'Data protection', 'Encryption, secrets, backup scope, data flows and region-aware decisions about where data lives.'],
+  ['EVIDENCE', 'Logging & traceability', 'Change history, configuration records and audit trails, retained and easy to produce.'],
+  ['POLICY', 'Guardrails', 'Account and subscription structure, policy-as-code, tagging and configuration rules that prevent drift.'],
+  ['RESILIENCE', 'Recovery', 'Tested backups, recovery targets, alerting and a clear owner for each operational risk.'],
+  ['REMEDIATION', 'Findings to fixes', 'Turn gaps into ranked tasks, implement them, and record what changed as evidence.'],
+];
+const frameworks = [
+  ['hipaa', 'HIPAA'], ['pci', 'PCI DSS'], ['dora', 'DORA'], ['gdpr', 'GDPR'], ['iso', 'ISO/IEC 27001'], ['soc', 'SOC 2'],
+];
+---
+<BaseLayout title="Cloud Security & Governance for Regulated Workloads" description="Cloud security and operational controls for healthcare, finance and other sensitive or regulated workloads, across AWS and Azure where applicable. Engineering controls and technical audit-readiness support.">
+  <JsonLd data={[breadcrumbSchema([{ name: 'Services', path: '/services/' }, { name: 'Regulated workloads', path: '/services/security-compliance/' }]), serviceSchema('Cloud security and governance for regulated workloads', 'Technical cloud safeguards and evidence readiness, scoped to the relevant industry, data, regulatory and contractual requirements.', '/services/security-compliance/')]} />
+  <section class="page-hero gridpaper">
+    <div class="wrap page-hero-grid">
+      <div>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/services/">Services</a><span aria-hidden="true">/</span><span>Regulated workloads</span></nav>
+        <p class="eyebrow">Security & governance · regulated workloads</p>
+        <h1>Cloud engineering for sensitive and regulated systems.</h1>
+        <p class="lead">Healthcare providers, financial organizations and software companies serving them may need stronger safeguards for sensitive data and essential services. We help design and review cloud controls, document technical evidence and address identified gaps. Applicable requirements are determined by your workload, location, data and organizational role.</p>
+        <div class="actions"><BookButton /><a class="btn btn-ghost" href="#frameworks">Which framework applies? <span class="arr" aria-hidden="true">↓</span></a></div>
+      </div>
+      <div class="split" style="align-self:stretch">
+        <div>
+          <span class="label" style="color:var(--accent-ink)">What we do</span>
+          <p>Design and implement the technical controls, collect the evidence, fix the gaps, and work alongside your auditor or compliance platform.</p>
+        </div>
+        <div>
+          <span class="label">What we don’t do</span>
+          <p>Issue audit opinions, certifications or legal advice. Those belong to independent auditors and lawyers, and anyone claiming otherwise is a red flag.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="controls" aria-labelledby="controls-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow">What we engineer</p><h2 id="controls-title">Six technical control areas worth evaluating.</h2></div>
+        <p class="intro">Security controls support risk reduction. Documentation and evidence can support compliance assessments, but neither engineering nor automation establishes compliance on its own.</p>
+      </div>
+      <div class="cells cols-3">
+        {controls.map((c, i) => (
+          <div>
+            <span class="cell-num">0{i + 1} · {c[0]}</span>
+            <h3 style="margin:12px 0 8px">{c[1]}</h3>
+            <p style="color:var(--ink-2);font-size:16px">{c[2]}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="frameworks" aria-labelledby="fx-heading">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow">Frameworks</p><h2 id="fx-heading">Different rules. The same engineering underneath.</h2></div>
+        <p class="intro">These are examples, not universal requirements for healthcare or finance. Applicability and scope must be confirmed for each organization and workload with appropriate compliance or legal expertise.</p>
+      </div>
+      <div class="fx">
+        <div class="fx-list" role="group" aria-label="Choose a framework">
+          {frameworks.map((f, i) => <button type="button" data-framework={f[0]} aria-pressed={i === 0 ? 'true' : 'false'}>{f[1]}<span>0{i + 1}</span></button>)}
+        </div>
+        <div class="fx-detail" aria-live="polite">
+          <div class="frame-cap" style="margin-bottom:0"><span>Engineering view</span><span id="fx-index">01 / 06</span></div>
+          <h3 id="fx-title">HIPAA</h3>
+          <p id="fx-desc">For in-scope US healthcare organisations and their business associates, the HIPAA Security Rule sets safeguards for electronic protected health information.</p>
+          <div class="fx-points" id="fx-points"><span class="chip">Access and audit controls</span><span class="chip">Risk analysis and procedures</span><span class="chip">Transmission and data safeguards</span></div>
+          <p class="fx-note" id="fx-note">Engineering support complements, but does not replace, organisational, contractual and legal obligations.</p>
+        </div>
+      </div>
+      <p class="caveat">Frameworks shown are examples, not certifications held by CAVELDON or guarantees of compliance. Primary sources: <a href="https://www.hhs.gov/hipaa/for-professionals/security/index.html">HHS HIPAA Security Rule</a>, <a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng">EU GDPR text</a>.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="method-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow">How it runs</p><h2 id="method-title">From findings to evidence in four steps.</h2></div>
+        <p class="intro">A defined assessment can help identify technical requirements, existing controls and areas to improve. The exact scope is agreed before work begins.</p>
+      </div>
+      <ol class="cells cols-4" style="list-style:none;padding:0;margin:0">
+        <li><span class="cell-num">01 · SCOPE</span><h3 style="margin:12px 0 8px">Map what’s in scope</h3><p style="color:var(--ink-2);font-size:16px">Systems, data flows, owners and which requirements actually apply.</p></li>
+        <li><span class="cell-num">02 · REVIEW</span><h3 style="margin:12px 0 8px">Check the controls</h3><p style="color:var(--ink-2);font-size:16px">Access, logging, configuration, backups, and the gaps in evidence.</p></li>
+        <li><span class="cell-num">03 · FIX</span><h3 style="margin:12px 0 8px">Close the gaps</h3><p style="color:var(--ink-2);font-size:16px">Ranked, reviewed changes, plus guardrails so problems don’t come back.</p></li>
+        <li><span class="cell-num">04 · PROVE</span><h3 style="margin:12px 0 8px">Record the evidence</h3><p style="color:var(--ink-2);font-size:16px">Test the controls, collect the proof, and list any risk you’ve chosen to accept.</p></li>
+      </ol>
+      <p style="margin-top:28px"><a class="link" href="/work/governance-control-evidence/">See our reference design for control evidence <span aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+
+  <CtaBlock title="Responsible for a sensitive or regulated cloud workload?" text="Describe the systems and technical controls you need help with. Do not send regulated records, confidential audit evidence or credentials in an initial inquiry." />
+</BaseLayout>

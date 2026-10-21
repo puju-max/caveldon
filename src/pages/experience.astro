@@ -1,0 +1,283 @@
+---
+/**
+ * The experience page.
+ *
+ * The strategic asset. CAVELDON's founder spent a decade doing every layer of
+ * this stack as an employee — hosting, support, cloud, DevOps, SRE, DevSecOps,
+ * security, cost, governance, and now AI infrastructure. As a job history that
+ * is a CV. As a sales asset it is the single most defensible thing in the
+ * business, because almost nobody buys five narrow specialists and glues them
+ * together themselves.
+ *
+ * The argument this page makes: the failure points in a cloud estate are at the
+ * SEAMS between disciplines. A security consultant who has never operated the
+ * service cannot tell whether their finding matters. A pipeline engineer who
+ * has never sat in an audit cannot build one that survives an audit. A cost
+ * engineer who has never carried a pager will happily cut the thing keeping
+ * the service alive.
+ *
+ * So the honest way to sell this is not "ten years of experience". It is:
+ * here is every seam, here is what fails there, and here is why one person
+ * who has stood on both sides of all of them sees what five contractors will
+ * not.
+ *
+ * IMPORTANT — evidence labelling. Prior professional experience is identified as
+ * such throughout the site and is never presented as CAVELDON client work. This
+ * page describes layers of practice and the perspective each one gives. No
+ * employer, client or project from before CAVELDON is named.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import CtaBlock from '../components/CtaBlock.astro';
+
+const layers = [
+  {
+    n: '01',
+    t: 'Linux hosting',
+    when: 'Where it started',
+    d: 'Learning a machine by administering it, not by reading about it.',
+    knows: 'What actually happens between a request and a response — what a process does when memory runs out, what a disk full does to a database, why the thing that worked at 2am is not the thing that works at 2pm.',
+    catches: 'A configuration that is technically valid and operationally hostile.',
+  },
+  {
+    n: '02',
+    t: 'Support and helpdesk',
+    when: 'Where users taught you',
+    d: 'Learning that most outages are not engineering failures. They are unclear ones.',
+    knows: 'What a failure looks like from the person having it, which is never what the dashboard says. And that "it is intermittent" is a description of a missing test, not a diagnosis.',
+    catches: 'An alert that fires for something nobody can act on, and a real problem that fires nothing.',
+  },
+  {
+    n: '03',
+    t: 'Cloud and DevOps',
+    when: 'Where change became repeatable',
+    d: 'Learning that the goal is not automation. It is that the same change produces the same result twice.',
+    knows: 'What a deployment pipeline is actually for: not speed, but the ability to undo. And which parts of a release are the parts that should never be automated.',
+    catches: 'A pipeline that passes every check and cannot be rolled back.',
+  },
+  {
+    n: '04',
+    t: 'Site reliability engineering',
+    when: 'Where failure became survivable',
+    d: 'Learning to design for the failure instead of arguing it will not happen.',
+    knows: 'What an SLO is for, what an error budget actually buys you, and why a recovery time that has never been measured is a guess.',
+    catches: 'An architecture with no defined failure mode, and therefore no defined recovery path.',
+  },
+  {
+    n: '05',
+    t: 'DevSecOps',
+    when: 'Where security moved into the pipeline',
+    d: 'Learning that a scan at the end of a pipeline is a gate, and a gate is not a practice.',
+    knows: 'Which findings actually get exploited and which are paperwork, and how to put the important checks where they are cheap to pass.',
+    catches: 'Security controls that exist in a document and nowhere else.',
+  },
+  {
+    n: '06',
+    t: 'Security engineering',
+    when: 'Where you saw it from the other side',
+    d: 'Learning that the attacker does not read your threat model. They read your DNS and your certificate transparency logs.',
+    knows: 'What identity is worth if it is everywhere, and what it is worth if it is a shared password. And why most "we are fine" answers are about posture, not capability.',
+    catches: 'An exposure that was never in scope because nobody thought it was part of the product.',
+  },
+  {
+    n: '07',
+    t: 'Cloud cost engineering',
+    when: 'Where the bill explained the architecture',
+    d: 'Learning that the invoice is a design document, written by whoever drew the system.',
+    knows: 'Which line items are structural and which are accidental, and that the cheapest month is frequently the month that starts an outage.',
+    catches: 'An optimisation that saves money and quietly moves the failure mode.',
+  },
+  {
+    n: '08',
+    t: 'Governance and compliance',
+    when: 'Where evidence became a by-product',
+    d: 'Learning that evidence is what is left over from doing the work properly — and that most of it is already there if you kept it.',
+    knows: 'What an auditor actually asks for, what a customer security questionnaire actually asks for, and which controls an insurer will not accept a screenshot of.',
+    catches: 'A control that is claimed, implemented and unevidenced — the single most common cause of a failed application.',
+  },
+  {
+    n: '09',
+    t: 'AI infrastructure',
+    when: 'Where the newest problem is an old one',
+    d: 'Learning that a model deployment is an operational problem that happens to use GPUs.',
+    knows: 'That inference cost, cold starts, queueing, failure handling and data residency are the same disciplines as everything above, wearing new vocabulary.',
+    catches: 'An AI feature launched as a prototype with none of the operating properties of a product.',
+  },
+];
+
+const seams = [
+  {
+    from: 'Security',
+    to: 'Operations',
+    problem: 'A finding is raised that is real but irrelevant to how the service actually runs, and it competes for attention with the thing that is actually about to break.',
+    because: 'The person who found it has never carried the pager for that service.',
+  },
+  {
+    from: 'Delivery',
+    to: 'Compliance',
+    problem: 'A pipeline is built that passes every automated check and cannot produce the evidence an auditor asks for, because evidence was never a requirement on it.',
+    because: 'The person who built it has never had to answer a security questionnaire.',
+  },
+  {
+    from: 'Cost',
+    to: 'Reliability',
+    problem: 'A saving is implemented that removes the redundancy that was carrying the availability target — and the saving shows up on the invoice for eleven months before the outage does.',
+    because: 'The person who optimised it has never operated the service through the failure.',
+  },
+  {
+    from: 'Platform',
+    to: 'Product',
+    problem: 'An infrastructure decision is made for technical reasons that nobody can reconstruct a year later, so nobody dares change it, so it stays.',
+    because: 'Nobody involved wrote down why the decision was made.',
+  },
+  {
+    from: 'Support',
+    to: 'Engineering',
+    problem: 'A recurring customer problem is classified as a user error and closed, and the pattern that would have shown a product defect never reaches the people who could fix it.',
+    because: 'The ticket queue and the backlog were never read by the same person.',
+  },
+  {
+    from: 'Security',
+    to: 'Governance',
+    problem: 'A control is implemented, and then nobody can show it was ever running — so the application fails on evidence, not on capability.',
+    because: 'Implementation and evidence were treated as separate projects, by different people, weeks apart.',
+  },
+];
+
+const means = [
+  'One person who has seen every layer, so the finding and the fix are assessed together.',
+  'Fixed scope and a fixed price, because the scope is a system rather than a task.',
+  'Everything written down, because the handover is part of the work and not an extra.',
+  'No hand-off, because there is nobody to hand off to.',
+  'A working setup you can keep running after we leave, not a dependency you have bought.',
+];
+---
+
+<BaseLayout
+  title="Every layer, from the inside"
+  description="Ten years across hosting, support, cloud, DevOps, SRE, security, cost, governance and AI infrastructure — and why one engineer who has done all of them sees what five narrow contractors will not."
+>
+  <JsonLd data={{
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: 'Every layer, from the inside',
+    description: 'The disciplines behind CAVELDON and the seams where cloud systems actually fail.',
+    mainEntity: { '@type': 'Person', name: 'Pujan Patel', jobTitle: 'Founder & Principal Cloud Engineer' },
+  }} />
+
+  <section class="band page-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Experience</span></nav>
+      <p class="eyebrow">Professional experience before CAVELDON</p>
+      <h1>Every layer of the stack, from the inside.</h1>
+      <p class="lead">
+        Nine disciplines, in the order I learned them. Each one changed what I could see
+        in the others. This page is the argument for why that matters — and it is the
+        reason CAVELDON exists as a practice rather than a consultancy.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="layers-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">The layers</p>
+          <h2 id="layers-title">What each one taught me to notice.</h2>
+        </div>
+        <p class="intro">
+          Not a list of job titles. For each layer: what it is, what you only know from
+          having done it, and the class of problem it lets you catch.
+        </p>
+      </div>
+
+      <div class="layers">
+        {layers.map(l => (
+          <article class="layer">
+            <div class="layer-id">
+              <span class="cell-num">{l.n}</span>
+              <span class="layer-when">{l.when}</span>
+            </div>
+            <div class="layer-body">
+              <h3>{l.t}</h3>
+              <p class="layer-d">{l.d}</p>
+              <div class="layer-knows">
+                <span class="label">What you only know from inside it</span>
+                <p>{l.knows}</p>
+              </div>
+              <p class="layer-catches"><b>It lets you catch:</b> {l.catches}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="seams-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">The argument</p>
+          <h2 id="seams-title">Systems fail at the seams, not in the middle.</h2>
+        </div>
+        <p class="intro">
+          Every discipline on its own is competent. The trouble is what happens where
+          two disciplines meet and neither one owns the outcome. These are the seams,
+          and they are where real money gets lost.
+        </p>
+      </div>
+
+      <div class="seam-list">
+        {seams.map(s => (
+          <article class="seam">
+            <div class="seam-pair">
+              <span class="seam-from">{s.from}</span>
+              <span class="seam-arrow" aria-hidden="true">→</span>
+              <span class="seam-to">{s.to}</span>
+            </div>
+            <p class="seam-problem">{s.problem}</p>
+            <p class="seam-because">{s.because}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="means-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">What that means for you</p>
+          <h2 id="means-title">Why one engineer is the cheaper option.</h2>
+        </div>
+        <p class="intro">
+          Hiring five specialists sounds safer. It is not, because the seams are
+          exactly where nobody is looking, and because coordinating five of them is
+          a project in itself.
+        </p>
+      </div>
+
+      <ol class="means-list">
+        {means.map((m, i) => (
+          <li>
+            <span class="means-n">{String(i + 1).padStart(2, '0')}</span>
+            <span>{m}</span>
+          </li>
+        ))}
+      </ol>
+
+      <p class="band-note">
+        The work described on this page is <b>professional experience before CAVELDON</b>,
+        not CAVELDON client work. No employer or client from that time is named, and
+        no project outcome is claimed. CAVELDON client work is published only when the
+        client authorises it — see the <a class="link" href="/work/">Engineering Lab</a>
+        for the standard we hold ourselves to.
+      </p>
+    </div>
+  </section>
+
+  <CtaBlock
+    title="Bring the whole thing, not one layer"
+    text="If you have a cloud estate where the security view, the operational view and the cost view disagree with each other — that is the problem we are built for. Describe the situation in plain words and we will tell you where we think it actually is."
+  />
+</BaseLayout>

@@ -1,0 +1,20 @@
+---
+/**
+ * Cookie-free analytics. Loads only on a live build with a provider and ID set in .env:
+ *   PUBLIC_ANALYTICS_PROVIDER=plausible   PUBLIC_ANALYTICS_ID=your-domain.com
+ *   PUBLIC_ANALYTICS_PROVIDER=umami       PUBLIC_ANALYTICS_ID=<website id>
+ *   PUBLIC_ANALYTICS_PROVIDER=cloudflare  PUBLIC_ANALYTICS_ID=<beacon token>   (page views only, no custom events)
+ * Optional PUBLIC_ANALYTICS_SRC overrides the script URL (self-hosted, or Plausible's per-site script).
+ */
+import { analytics, isLive } from '../data/site';
+const { provider, id, src } = analytics;
+const on = isLive && Boolean(provider && id);
+---
+{on && provider === 'plausible' && (
+  <>
+    <script defer data-domain={id} src={src || 'https://plausible.io/js/script.js'}></script>
+    <script is:inline>window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments); };</script>
+  </>
+)}
+{on && provider === 'umami' && <script defer data-website-id={id} src={src || 'https://cloud.umami.is/script.js'}></script>}
+{on && provider === 'cloudflare' && <script defer src={src || 'https://static.cloudflareinsights.com/beacon.min.js'} data-cf-beacon={JSON.stringify({ token: id })}></script>}

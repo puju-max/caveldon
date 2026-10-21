@@ -1,0 +1,44 @@
+---
+/**
+ * Signal strip — real numbers instead of adjectives.
+ *
+ * Research on 2026 sites is blunt: "Generic 'trusted by 10,000+ teams' claims" with
+ * nothing behind them do not work. So this strip uses only facts we can point at
+ * and that a buyer can verify: the number of checks the free scanner runs, the
+ * number of control families, the number of reference designs published, and the
+ * first step we take.
+ *
+ * As these become true rather than illustrative, update the numbers.
+ */
+const signals = [
+  {
+    n: '2',
+    label: 'cloud platforms we work across — <b>AWS and Azure</b> — with the trade-offs of each written down rather than hidden',
+    color: 'var(--p1)',
+  },
+  {
+    n: '8',
+    label: 'control families covered across cloud, security, managed infrastructure and operations',
+    color: 'var(--p2)',
+  },
+  {
+    n: '0',
+    label: 'credentials, agents or logins required to read a public attack surface',
+    color: 'var(--p3)',
+  },
+  {
+    n: '3',
+    label: 'reference designs published in the Engineering Lab, each with an explicit validation plan',
+    color: 'var(--p4)',
+  },
+];
+---
+
+<div class="signal-strip">
+  {signals.map(s => (
+    <div class="signal" style={`--sc:${s.color}`}>
+      <span class="signal-n">{s.n}</span>
+      <span class="signal-l" set:html={s.label} />
+    </div>
+  ))}
+</div>

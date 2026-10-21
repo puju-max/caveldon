@@ -1,0 +1,21 @@
+---
+import BookButton from './BookButton.astro';
+interface Props { title?: string; text?: string; }
+const {
+  title = 'Not sure where to start? That’s what the first call is for.',
+  text = 'Tell us what you are working on or what needs improving. We can discuss the next practical step and whether our expertise is a fit.',
+} = Astro.props;
+---
+<section class="section cta" aria-labelledby="cta-title">
+  <div class="wrap cta-grid">
+    <div>
+      <p class="eyebrow">Next step</p>
+      <h2 id="cta-title">{title}</h2>
+      <p>{text}</p>
+    </div>
+    <div class="actions">
+      <BookButton variant="light" />
+      <a class="link" href="/contact/">or send a message <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>

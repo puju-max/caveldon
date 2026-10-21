@@ -1,0 +1,286 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookButton from '../../components/BookButton.astro';
+import CtaBlock from '../../components/CtaBlock.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { breadcrumbSchema, serviceSchema } from '../../lib/schema';
+
+const services = [
+  {
+    id: "setup",
+    title: "Cloud foundations & platform engineering",
+    promise: "A clear foundation for hosting and operating software.",
+    intro: "For new applications, growing platforms or cloud environments that need stronger structure, security and ownership.",
+    signs: ["Production and testing share one cloud environment", "Infrastructure setup is undocumented or owned by one person", "Access privileges and environment ownership are unclear", "You are launching a system and need an operational foundation"],
+    work: ["Plan cloud environments, networks, identity and access boundaries", "Set up hosting, storage, databases and secure connectivity", "Create repeatable infrastructure definitions and operating guardrails", "Document architecture, ownership, backup and recovery responsibilities"],
+    get: ["A documented cloud environment and ownership model", "Repeatable infrastructure configuration and deployment foundations", "Architecture decisions, operating notes and handover material"],
+    areas: ["Cloud environments", "Networking", "Compute & containers", "Storage & databases", "Access controls", "Infrastructure as code"],
+  },
+  {
+    id: "migration",
+    title: "Cloud migration & modernization",
+    promise: "Move systems carefully. Improve what comes next.",
+    intro: "For organizations moving from on-premises or existing hosting to cloud infrastructure, between cloud providers, or toward managed services.",
+    signs: ["Legacy hosting is hard to maintain or scale", "You are considering a move between cloud platforms or regions", "An application depends on a database that also needs moving", "You need a cutover plan that addresses downtime and rollback"],
+    work: ["Discover applications, databases, dependencies and data-location needs", "Plan destination architecture, migration sequence and connectivity", "Prepare and test application or database transfers and cutover options", "Validate security, data integrity, performance and recovery after migration"],
+    get: ["Migration assessment, dependency map and proposed approach", "Cutover, validation and rollback plan matched to your constraints", "Updated architecture and documented operating handover"],
+    areas: ["Application & server migration", "Database & data migration", "Cloud-to-cloud migration", "Infrastructure modernization", "Hybrid connectivity", "Validation & rollback"],
+    more: { href: "/services/cloud-migration/", label: "Explore migration service" },
+  },
+  {
+    id: "devops",
+    title: "DevOps, automation & delivery",
+    promise: "Make changes predictable and easier to recover.",
+    intro: "For teams that want more consistent software delivery without relying on manual production changes.",
+    signs: ["Releases depend on manual steps or one engineer", "Changes often introduce outages or require stressful fixes", "Testing and production environments have drifted apart", "Changes lack clear approval and traceability"],
+    work: ["Build automated delivery pipelines with checks and rollback criteria", "Introduce code reviews, test gates and artifact controls", "Define reproducible environments and deployment processes", "Record changes and document how releases are operated"],
+    get: ["An understandable delivery pipeline and review process", "Deployment and rollback guidance", "Traceability for infrastructure and application changes"],
+    areas: ["Continuous integration & delivery", "Infrastructure as code", "Container deployment", "Release controls", "Automated testing", "Change history"],
+  },
+  {
+    id: "security",
+    title: "Security, governance & compliance readiness",
+    promise: "Technical controls that can be reviewed and evidenced.",
+    intro: "For teams protecting customer data, improving internal governance or preparing for applicable technical security requirements.",
+    signs: ["Customer security questions are hard to answer with evidence", "Privileged access or account ownership is unclear", "Configuration changes and activity records are difficult to trace", "Relevant controls have findings that nobody owns"],
+    work: ["Improve identity, authentication, access roles and periodic reviews", "Set up logs, alerts, configuration checks and policy guardrails", "Review encryption, secrets handling, backups and data flows", "Document technical control evidence, exceptions and remediation work"],
+    get: ["A scoped technical control inventory with clear owners", "Prioritized remediation findings and supporting evidence", "Written boundaries between engineering work and independent assurance"],
+    areas: ["User access controls", "Cloud policy & guardrails", "Encryption & secrets", "Activity and audit logging", "Data protection", "Technical evidence"],
+    more: { href: "/services/security-compliance/", label: "Regulated workload security" },
+  },
+  {
+    id: "reliability",
+    title: "Reliability, performance & monitoring",
+    promise: "Make systems observable and practical to operate.",
+    intro: "For teams that need better visibility, predictable performance and tested recovery procedures.",
+    signs: ["Users report incidents before alerts reach the team", "Backups exist but have not been restored in a test", "Scaling behavior or performance bottlenecks are unknown", "Operational knowledge is concentrated in a few people"],
+    work: ["Monitor useful uptime, errors, performance and capacity signals", "Design alert ownership, incident response and recovery workflows", "Review availability architecture and scaling behavior", "Validate backups, restoration and recovery assumptions"],
+    get: ["Relevant dashboards and assigned operational alerts", "A documented recovery and incident-response approach", "Known performance limits and a plan for validation"],
+    areas: ["Monitoring & observability", "Incident readiness", "Backups & recovery", "Performance testing", "Scaling", "Operational runbooks"],
+  },
+  {
+    id: "cost",
+    title: "Cloud cost & FinOps engineering",
+    promise: "Understand spending before changing infrastructure.",
+    intro: "For organizations that need to track cloud expenses and improve efficiency without sacrificing reliability.",
+    signs: ["Cloud costs are increasing without clear explanations", "Capacity sits unused or expenses are not allocated", "No one owns budgets and cost review", "Optimization suggestions lack performance or recovery analysis"],
+    work: ["Break down spending by environment, workload and service", "Compare utilization, capacity and spending patterns", "Review right-sizing, scheduling, storage and commitment trade-offs", "Introduce budgets, ownership and repeatable cost reviews"],
+    get: ["A cost and utilization baseline", "Prioritized improvement options with operational trade-offs", "Cost visibility and review practices your team can maintain"],
+    areas: ["Cost visibility", "Resource utilization", "Budget controls", "Capacity planning", "Architecture trade-offs", "FinOps practices"],
+  },
+  {
+    id: "managed",
+    title: "Managed servers & infrastructure",
+    promise: "Your infrastructure, looked after on a schedule.",
+    intro: "For teams that want their servers and cloud estate run to a documented standard without hiring a full operations team.",
+    signs: ["Servers are patched and checked only when someone remembers", "Nobody can say when each environment was last reviewed", "Backups run, but nobody has restored one", "Monitoring alerts land in an inbox nobody owns"],
+    work: ["Define a patching, backup and review schedule for every environment", "Operate monitoring, alerting and the response to each alert type", "Run restore drills and record measured recovery times", "Keep a live inventory of hosts, versions, configuration and ownership"],
+    get: ["A documented operating schedule and named ownership", "Evidence of patching, backup and restore testing on a cadence", "An inventory you can hand to an auditor, a buyer or the next engineer"],
+    areas: ["Managed servers", "Patch & lifecycle management", "Backup & restore testing", "Monitoring & alerting", "Configuration drift", "Asset inventory"],
+  },
+  {
+    id: "support",
+    title: "IT support & end-user helpdesk",
+    promise: "A support function that escalates properly and closes things.",
+    intro: "For growing teams that need a staffed helpdesk covering their own staff and their customers' users.",
+    signs: ["Support requests arrive in personal inboxes and get lost", "Nobody knows which requests are still open", "Customers escalate to founders because the process is unclear", "Repeat issues are fixed for one person and not the next"],
+    work: ["Set up a ticketing workflow with priorities, ownership and response targets", "Handle escalations with a documented triage path", "Build a knowledge base from resolved issues", "Report on response times, backlog and repeat causes"],
+    get: ["A support workflow your team can run without you", "Clear ownership, escalation rules and response commitments", "A record of what was asked, what was done and why"],
+    areas: ["Ticket intake & triage", "Escalation handling", "User onboarding & offboarding", "Account & access requests", "Knowledge base", "Service reporting"],
+  },
+  {
+    id: "product",
+    title: "Software & product engineering",
+    promise: "Applications built to be operated, not just shipped.",
+    intro: "For teams that need a product built, hardened and handed over, or an existing application brought back under control.",
+    signs: ["The application works but nobody can deploy it safely", "Release depends on one person and a long checklist", "There are no tests, or tests that rarely run", "New features take longer because changes are risky"],
+    work: ["Design and build web and API applications with clear ownership boundaries", "Set up automated build, test and release pipelines with rollback", "Introduce version control, review and traceability practices", "Hand over with runbooks, environment documentation and a working deployment path"],
+    get: ["A working application with a repeatable deployment path", "Automated checks that run on every change", "Documentation your team can operate and extend"],
+    areas: ["Web & API applications", "CI/CD pipelines", "Testing & release gates", "Code review & versioning", "API & data layers", "Handover & runbooks"],
+  },
+  {
+    id: "ai",
+    title: "AI infrastructure (developing practice)",
+    promise: "Reference engineering for AI workload operations.",
+    intro: "A developing practice focused on technical demonstrations and infrastructure planning, rather than unverified claims of AI delivery experience.",
+    signs: ["AI workload infrastructure needs clear security boundaries", "Model hosting and inference costs are difficult to forecast", "Scaling and monitoring requirements are uncertain", "Data access and operational responsibilities need definition"],
+    work: ["Develop reference comparisons for model hosting approaches", "Evaluate capacity, inference scaling and cost models", "Design data-handling, access-control and logging considerations", "Document observability and operational validation plans"],
+    get: ["Reference designs and technical decision notes", "Cost, performance and security considerations", "Validation plans to develop capability responsibly"],
+    areas: ["AI hosting architecture", "Compute & capacity", "Private inference patterns", "AI workload monitoring", "Data protection", "Cost modeling"],
+  },
+];
+
+const practices = [
+  { number: '01', title: 'Cloud, Platform & Product Engineering', description: 'Build, migrate and modernize the environments and applications behind your software.', items: [
+    { label: 'Cloud environment setup', href: '#setup' },
+    { label: 'Cloud migration & modernization', href: '/services/cloud-migration/' },
+    { label: 'DevOps & delivery automation', href: '#devops' },
+    { label: 'Software & product engineering', href: '#product' },
+  ] },
+  { number: '02', title: 'Security, Governance & Compliance Readiness', description: 'Protect systems, establish practical controls and document technical evidence.', items: [
+    { label: 'Identity & access controls', href: '#security' },
+    { label: 'Cloud policies & safeguards', href: '#security' },
+    { label: 'Data protection & audit trails', href: '#security' },
+    { label: 'Regulated workload readiness', href: '/services/security-compliance/' },
+  ] },
+  { number: '03', title: 'Managed Infrastructure & Support', description: 'Run the estate day to day — servers, monitoring, restore drills and the helpdesk.', items: [
+    { label: 'Managed servers & operations', href: '#managed' },
+    { label: 'IT support & helpdesk', href: '#support' },
+    { label: 'Reliability & monitoring', href: '#reliability' },
+    { label: 'Backups & restore testing', href: '#managed' },
+  ] },
+  { number: '04', title: 'Reliability, Performance & FinOps', description: 'Make systems observable, resilient, performant and cost-aware.', items: [
+    { label: 'Cloud cost optimization', href: '#cost' },
+    { label: 'Performance & capacity', href: '#reliability' },
+    { label: 'Architecture trade-offs', href: '#cost' },
+    { label: 'Operational improvement', href: '#reliability' },
+  ] },
+];
+
+const solutions = [
+  { number: '01', name: 'Cloud Readiness Review', description: 'Understand your current cloud architecture, technical risks and realistic next steps.', includes: 'Architecture · security · operations · cost' },
+  { number: '02', name: 'Migration Assessment', description: 'Map dependencies, destination options, cutover risks and a sensible migration sequence.', includes: 'Applications · databases · rollback · validation' },
+  { number: '03', name: 'Security & Governance Review', description: 'Review access, protective controls, configuration visibility and technical evidence gaps.', includes: 'Access · policies · data protection · evidence' },
+  { number: '04', name: 'Cost & Reliability Assessment', description: 'Identify performance and spending trade-offs before making changes to production.', includes: 'Utilization · observability · resilience · cost' },
+];
+---
+<BaseLayout title="Services" description="Cloud and platform engineering across AWS and Azure, security and governance readiness, reliability, operational engineering and FinOps for growing software businesses.">
+  <JsonLd data={[breadcrumbSchema([{ name: 'Services', path: '/services/' }]), ...services.filter(s => s.id !== 'ai').map(s => serviceSchema(s.title, s.intro, `/services/#${s.id}`))]} />
+  <section class="page-hero gridpaper service-overview-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Services</span></nav>
+      <p class="eyebrow">Cloud engineering services · AWS + Azure</p>
+      <h1>Cloud engineering, made practical.</h1>
+      <p class="lead">Explore four connected service areas: cloud platforms and product engineering, security and governance, managed infrastructure and support, and reliable, cost-aware operations. Choose a capability below—or start with a practical engineering review.</p>
+      <div class="actions">
+        <a class="btn btn-ghost btn-sm" href="#practice-map">Explore services <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost btn-sm" href="#solutions">Starting engagements <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+      <p class="aside-note" style="margin-top:22px"><span class="label">Developing practice</span> AI infrastructure reference engineering is described further down this page. <a class="link" href="#ai">View AI infrastructure →</a></p>
+    </div>
+  </section>
+
+  <!-- SERVICE MAP: three categories with navigable sub-services -->
+  <section class="section section--tight" id="practice-map" aria-labelledby="practice-map-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow">Our services</p><h2 id="practice-map-title">Find the work you need.</h2></div>
+        <p class="intro">Each practice brings several related services together. Select a capability to understand the work, expected deliverables, and next steps. <a class="link" href="/partner/">Working through an MSP? <span aria-hidden="true">→</span></a></p>
+      </div>
+      <div class="practice-map">
+        {practices.map(group => (
+          <article class="practice-card">
+            <span class="cell-num">{group.number} / PRACTICE</span>
+            <h3>{group.title}</h3>
+            <p>{group.description}</p>
+            <ul>
+              {group.items.map(item => <li><a href={item.href}>{item.label}<span aria-hidden="true">↗</span></a></li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+      <p class="aside-note"><span class="label">Developing in our lab</span> AI infrastructure—compute planning, hosting and secure operations—is a future specialist practice, not an established full-service AI offering. <a class="link" href="#ai">Our current scope →</a></p>
+    </div>
+  </section>
+
+  <section class="section section--alt section--tight" id="solutions" aria-labelledby="solutions-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow">Starting engagements</p><h2 id="solutions-title">A clear first step, not a large commitment.</h2></div>
+        <p class="intro">Not sure what to ask for? These are proposed assessment formats. We agree the scope, cost, timeline, and deliverables before any work begins.</p>
+      </div>
+      <div class="cells cols-2 solution-cards">
+        {solutions.map(o => (
+          <article class="svc">
+            <span class="cell-num">{o.number} / ASSESSMENT</span>
+            <h3>{o.name}</h3>
+            <p>{o.description}</p>
+            <span class="label" style="margin-top:20px">{o.includes}</span>
+            <a class="link" href="/contact/#form" style="margin-top:20px">Discuss this assessment <span aria-hidden="true">→</span></a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" id="capabilities" aria-labelledby="capabilities-title">
+    <div class="wrap sec-head" style="margin-bottom:0">
+      <div><p class="eyebrow">In more detail</p><h2 id="capabilities-title">How we deliver the work.</h2></div>
+      <p class="intro">Each capability below explains when it is useful, the engineering involved, and what you could receive in an agreed engagement.</p>
+    </div>
+  </section>
+
+  {services.map((s, i) => (
+    <>
+    {(i === 0 || i === 3 || i === 4 || i === 6) && <div class="service-band"><div class="wrap"><span class="label">{i === 0 ? '01 / CLOUD & PLATFORM ENGINEERING' : i === 3 ? '02 / SECURITY & GOVERNANCE' : i === 4 ? '03 / OPERATIONS & FINOPS' : 'DEVELOPING PRACTICE / AI INFRASTRUCTURE'}</span></div></div>}
+    <section class:list={['section', 'service-detail-section', i % 2 === 1 && 'section--alt']} id={s.id} aria-labelledby={`${s.id}-title`}>
+      <div class="wrap svc-detail">
+        <div>
+          <span class="cell-num">CAPABILITY 0{i + 1}</span>
+          <h2 id={`${s.id}-title`} style="margin-top:10px">{s.title}</h2>
+          <p class="promise">{s.promise}</p>
+          <p class="intro">{s.intro}</p>
+          <div class="actions">
+            {s.id === 'ai' ? <a class="btn btn-ghost btn-sm" href="/work/">Explore reference engineering <span class="arr" aria-hidden="true">→</span></a> : <BookButton size="sm" label="Discuss this work" />}
+            {s.more && <a class="btn btn-ghost btn-sm" href={s.more.href}>{s.more.label} <span class="arr" aria-hidden="true">→</span></a>}
+          </div>
+        </div>
+        <div>
+          <div class="block"><h3>Signs you need this</h3><ul class="checks">{s.signs.map(x => <li>{x}</li>)}</ul></div>
+          <div class="block"><h3>What we do</h3><ul class="checks done">{s.work.map(x => <li>{x}</li>)}</ul></div>
+          <div class="block"><h3>What you’re left with</h3><ul class="checks done">{s.get.map(x => <li>{x}</li>)}</ul></div>
+          <div class="block"><h3>What this work includes</h3><div class="tags">{s.areas.map(t => <span class="chip">{t}</span>)}</div></div>
+          {s.id === "migration" && <p class="aside-note" style="margin-top:18px"><span class="label">Business applications</span> Moving a system such as Microsoft Dynamics 365 involves product-specific configuration, data models and business processes. Such work is assessed separately; cloud infrastructure expertise alone is not sufficient.</p>}
+        </div>
+      </div>
+    </section>
+    </>
+  ))}
+
+  <section class="section section--alt" id="evidence" aria-labelledby="evidence-title">
+    <div class="wrap">
+      <div class="sec-head"><div><p class="eyebrow">Evidence over claims</p><h2 id="evidence-title">Judge the approach for yourself.</h2></div><p class="intro">Our Engineering Lab publishes reference designs with decisions and validation plans. They are not delivered client projects or proof of measured outcomes.</p></div>
+      <div class="cells cols-3">
+        <article class="svc"><span class="cell-num">REFERENCE 01</span><h3>Production cloud platform</h3><p>Architecture decisions, safe delivery and operational verification criteria.</p><a class="link" href="/work/cloud-production-architecture/">Explore the reference <span aria-hidden="true">→</span></a></article>
+        <article class="svc"><span class="cell-num">REFERENCE 02</span><h3>Security controls & evidence</h3><p>Identity, configuration, activity records, ownership and evidence planning.</p><a class="link" href="/work/governance-control-evidence/">Explore the reference <span aria-hidden="true">→</span></a></article>
+        <article class="svc"><span class="cell-num">REFERENCE 03</span><h3>Cost vs. reliability</h3><p>A measured approach to capacity decisions, performance and cloud spending.</p><a class="link" href="/work/cost-reliability-engineering/">Explore the reference <span aria-hidden="true">→</span></a></article>
+      </div>
+      <div class="evidence-note"><span class="label">How trust is earned</span><span>Founder-led technical work · clear scope and handover · verifiable engineering evidence as it becomes available. No invented client logos, certifications or outcomes.</span></div>
+    </div>
+  </section>
+
+  <section class="section" id="team" aria-labelledby="team-title">
+    <div class="wrap two-col">
+      <div>
+        <span class="cell-num">ENGAGEMENT OPTIONS</span>
+        <h2 id="team-title" style="margin-top:10px">Ongoing engineering support, when appropriate.</h2>
+        <p class="promise" style="color:var(--accent-ink);font-weight:600;font-size:19px;margin-top:12px">Continuity without unnecessary complexity.</p>
+        <div class="actions"><BookButton size="sm" label="Discuss support requirements" /></div>
+      </div>
+      <div>
+        <p class="intro">Some businesses need targeted implementation; others may benefit from continuity after delivery. We can discuss review cycles, improvements and handover expectations based on available capacity and an agreed scope.</p>
+        <ul class="checks done" style="margin-top:20px">
+          <li>Release improvements and operational reviews where covered by the agreed scope</li>
+          <li>Incident assistance only where explicitly agreed in the engagement scope</li>
+          <li>Periodic security, reliability and cost reviews where contracted</li>
+          <li>Plan for documentation and a clean handover when responsibilities change</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="regulated" aria-labelledby="reg-title">
+    <div class="wrap two-col">
+      <div>
+        <span class="cell-num">ALSO</span>
+        <h2 id="reg-title" style="margin-top:10px">Cloud engineering for regulated workloads.</h2>
+      </div>
+      <div>
+        <p class="intro">We can assess cloud security and operational controls for businesses in healthcare, financial services and other regulated settings—and for software providers serving them. Which obligations apply depends on the organization, data and service, not simply its industry label.</p>
+        <p style="margin-top:20px"><a class="link" href="/services/security-compliance/">Explore regulated workload engineering <span aria-hidden="true">→</span></a></p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBlock title="Need cloud engineering support?" text="Tell us what needs attention. We can discuss a suitable next step and whether the project fits our expertise." />
+</BaseLayout>

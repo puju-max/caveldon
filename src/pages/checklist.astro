@@ -1,0 +1,240 @@
+---
+/**
+ * The small-environment checklist.
+ *
+ * This is the free thing we give away. It replaces the domain scanner that
+ * used to sit here: a scanner is a product, and this is a services practice —
+ * but a scanner was also never what this buyer needed. What a two-person team
+ * needs is the list of things nobody has checked yet.
+ *
+ * It has to work without us. If someone works through this and their setup is
+ * already sound, they should not need to hire anyone, and the checklist should
+ * have saved them the call.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import CtaBlock from '../components/CtaBlock.astro';
+
+const groups = [
+  {
+    n: '01',
+    t: 'Identity and access',
+    lead: 'The control that matters most, and the one most often left to a default.',
+    good: 'Every permission has a name attached to it, and standing admin does not exist.',
+    items: [
+      'No shared accounts. Every human has their own identity.',
+      'No long-lived access keys stored in a laptop, a repository or a CI config.',
+      'No standing administrator access for routine work.',
+      'Every role that can change infrastructure, network or data has an owner.',
+      'Unused service accounts, roles and keys have been found and removed.',
+      'Access for contractors and ex-people has been revoked, not just forgotten.',
+      'Production access is separate from development access.',
+      'Someone has read the policies — not just created them.',
+    ],
+  },
+  {
+    n: '02',
+    t: 'The network',
+    lead: 'What can reach what, and what happens when that changes by accident.',
+    good: 'You can state, in one sentence, which parts of your system are reachable from the internet.',
+    items: [
+      'The database is not reachable from the public internet.',
+      'The application is not reachable directly — it sits behind a load balancer or a gateway.',
+      'Inbound traffic is encrypted, and HTTP is redirected to HTTPS.',
+      'Outbound traffic is restricted to what the application actually needs.',
+      'Administrative interfaces are reachable only from a known place.',
+      'Security groups or network rules have been read line by line, not just copied.',
+      'There is a firewall or equivalent between environments.',
+      'DNS records point where you think they point, including the ones you forgot.',
+    ],
+  },
+  {
+    n: '03',
+    t: 'The workload',
+    lead: 'The things running, and what happens when one of them stops.',
+    good: 'You know what is running, on what, and how many of each.',
+    items: [
+      'You can list every compute resource and what it is for.',
+      'Nothing is running that nobody remembers creating.',
+      'Automatic scaling has sensible minimum and maximum values, and you know what they cost.',
+      'Health checks exist and are meaningful — not just returning 200.',
+      'A single instance is not the only copy of anything that matters.',
+      'The operating system and runtime are on a version that still gets security updates.',
+      'Containers, if used, run as a non-root user.',
+      'Resource limits are set, so one process cannot take the whole machine.',
+    ],
+  },
+  {
+    n: '04',
+    t: 'Deployments',
+    lead: 'The path from a commit to production, and the way back.',
+    good: 'The same change can be deployed twice in a row, and rolled back in minutes.',
+    items: [
+      'Deploying is one command or one pipeline run, not a sequence somebody remembers.',
+      'The same artefact is promoted between environments — not rebuilt per environment.',
+      'There is a rollback, and it has been executed at least once.',
+      'Secrets are injected at deploy time and are not in the repository.',
+      'The pipeline fails the build when tests fail.',
+      'Somebody has to approve a production deployment.',
+      'You know which commit is running right now.',
+      'A failed deployment does not leave half the fleet on the old version.',
+    ],
+  },
+  {
+    n: '05',
+    t: 'Data and backups',
+    lead: 'The part everybody assumes and nobody verifies.',
+    good: 'You have restored a backup and written down how long it took.',
+    items: [
+      'Backups are enabled on everything that holds state.',
+      'Retention is set deliberately, and it matches what you actually need to keep.',
+      'Backups are in a different account or region from the primary.',
+      'Someone has performed a restore, in a test environment, and it worked.',
+      'The restore time is written down, with a date.',
+      'Backups cannot be deleted by the same credentials that run the application.',
+      'Object storage versioning is on where it matters.',
+      'The database has been backed up as a file, not only as a snapshot.',
+    ],
+  },
+  {
+    n: '06',
+    t: 'Seeing what is happening',
+    lead: 'Enough to know it is broken before a customer tells you.',
+    good: 'Every alert has a person attached to it and a documented first action.',
+    items: [
+      'Logs are collected somewhere that survives the instance being replaced.',
+      'Logs are not being deleted or overwritten within a week.',
+      'There is a monitor on the things that are actually used, not just the ones that are easy.',
+      'Disk space, memory and certificate expiry are monitored.',
+      'Alerts go to a person, and to a rotation if more than one person is on call.',
+      'There is a written response path — what to check first, in what order.',
+      'Alerts have been fired at least once, so you know they work.',
+      'You have not set up more than you are willing to action.',
+    ],
+  },
+  {
+    n: '07',
+    t: 'Cost',
+    lead: 'The bill should be explainable line by line.',
+    good: 'You can say what each significant line item is for.',
+    items: [
+      'Everything is tagged with something you can group by.',
+      'You know which environment, workload or team each bill line belongs to.',
+      'Budget alerts exist and are set at a threshold you would actually notice.',
+      'Idle resources — unattached disks, forgotten load balancers, stopped instances still running — have been looked for.',
+      'NAT gateways, cross-AZ traffic and log storage have been looked at.',
+      'You know which commitment discounts apply and whether they are worth it.',
+      'The free tier limits have been checked against your actual usage.',
+      'Somebody reviews the bill monthly, even if it only takes ten minutes.',
+    ],
+  },
+  {
+    n: '08',
+    t: 'Before you call it done',
+    lead: 'The last mile, and the part most setups skip.',
+    good: 'Someone who did not build it could take it over tomorrow.',
+    items: [
+      'The infrastructure is in version control, and the history makes sense.',
+      'The README explains how to stand the environment up from nothing.',
+      'Every non-obvious decision has a written reason.',
+      'The handover has been read by someone who did not build it.',
+      'You know what will break first, and roughly when.',
+      'The monitoring, the runbook and the backup restore are all tested, not assumed.',
+      'You know who to call when something breaks, including if that person is you.',
+      'Nothing depends on one person remembering how it was set up.',
+    ],
+  },
+];
+
+const closing = [
+  'If the database dies today, what happens, and who notices first?',
+  'If the person who set this up is unreachable for a week, can it still be deployed?',
+  'If a customer asks you to prove you can restore a backup, can you show it?',
+  'If your largest bill line doubled overnight, would you know before they invoiced you?',
+  'If you had to hand this to a new engineer tomorrow, what would they be missing?',
+];
+---
+
+<BaseLayout
+  title="The small-environment checklist"
+  description="A free, printable checklist for a small team running one application in the cloud. Eight sections covering access, network, workload, deployments, data, monitoring, cost and handover. Written to be useful without us."
+>
+  <JsonLd data={{
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'The small-environment checklist',
+    description: 'A free checklist for teams running one application in AWS or Azure.',
+    author: { '@type': 'Organization', name: 'CAVELDON' },
+    isAccessibleForFree: true,
+  }} />
+
+  <section class="page-hero gridpaper">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Checklist</span></nav>
+      <p class="eyebrow">Free · printable · no signup</p>
+      <h1>The small-environment checklist.</h1>
+      <p class="lead">
+        The list we work from when we set up an environment for a team that knows the
+        code but not the infrastructure. Eight sections, about sixty checks. It works
+        without us — if you go through it and everything is fine, you do not need us.
+      </p>
+      <p class="callout" style="margin-top:28px;max-width:64ch">
+        <strong>How to use it:</strong> go through it with the person who deployed the
+        application. Every line you cannot answer confidently is a finding. Bring us
+        the list, or work through it yourself — both are fine.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Checklist">
+    <div class="wrap">
+      <div class="check-groups">
+        {groups.map(g => (
+          <section class="check-group" aria-labelledby={`grp-${g.n}`}>
+            <header class="check-head">
+              <span class="cell-num">{g.n}</span>
+              <div>
+                <h2 id={`grp-${g.n}`}>{g.t}</h2>
+                <p class="check-lead">{g.lead}</p>
+              </div>
+              <p class="check-good"><b>What good looks like:</b> {g.good}</p>
+            </header>
+            <ul class="check-items">
+              {g.items.map(i => (
+                <li>
+                  <span class="check-box" aria-hidden="true"></span>
+                  <span>{i}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="closing-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow">The five questions</p>
+          <h2 id="closing-title">If you only have five minutes.</h2>
+        </div>
+        <p class="intro">
+          If you do not have time for the whole checklist, answer these five. They
+          find most of what matters, and each one is a question a customer, an
+          auditor or an insurer may eventually ask you.
+        </p>
+      </div>
+
+      <ol class="closing-list">
+        {closing.map(c => <li>{c}</li>)}
+      </ol>
+    </div>
+  </section>
+
+  <CtaBlock
+    title="If the checklist found something"
+    text="Bring us the list and we will tell you what is urgent, what is not, and what we would do about it. If the honest answer is that you can fix it yourselves, that is what we will tell you."
+  />
+</BaseLayout>

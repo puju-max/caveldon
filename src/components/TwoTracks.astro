@@ -1,0 +1,109 @@
+---
+/**
+ * Two ways to work with us.
+ *
+ * The same work reaches us two different ways, and both matter:
+ *
+ *   1. DIRECT — a team buys the engagement themselves. They keep every
+ *      relationship and every margin.
+ *
+ *   2. THROUGH AN MSP — an MSP buys the delivery and resells it to their own
+ *      client under their own name. We are invisible. They keep the client,
+ *      the credit and the margin.
+ *
+ * The second path is the one that scales fastest, and it is how MSPs have
+ * been solving the same capacity problem for a decade. We are not competing
+ * with an MSP's helpdesk. We are the bench behind it.
+ *
+ * This block is the summary. The full arrangement — how access works, what we
+ * hand back, what the wholesale pricing is — is on /partner/.
+ */
+import { WHOLESALE_RATE, partnerMargin } from '../data/pricing';
+
+const direct = {
+  who: 'You buy directly',
+  sub: 'You are the client. You keep the relationship, the credit and the margin.',
+  points: [
+    'We report to you, and only you.',
+    'Everything we produce is yours — findings, runbooks, code, documentation.',
+    'No reseller in between, so no margin is lost on either side.',
+    'Best when the work is core to how your team operates.',
+  ],
+  cta: 'Talk about a direct engagement',
+};
+
+const viaMsp = {
+  who: 'An MSP buys the work, you keep the client',
+  sub: 'Your client never hears from us. Your name is on everything.',
+  points: [
+    'Your brand on every report, runbook and handover. We are not named.',
+    "We work in your client's own accounts, under access you grant and can revoke.",
+    'You set the price to your client. We invoice you, at a wholesale rate.',
+    'Good when you have won the work but not the bench to deliver it, or need a specialist for one engagement.',
+  ],
+  cta: 'Discuss a white-label arrangement',
+};
+
+const rate = Math.round(WHOLESALE_RATE * 100);
+const margin = partnerMargin({ value: 100 } as never);
+---
+
+<section class="section" id="two-tracks" aria-labelledby="how-we-work-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Two ways to work with us</p>
+        <h2 id="how-we-work-title">Direct, or through your MSP.</h2>
+      </div>
+      <p class="intro">
+        Some teams hire us. Some MSPs hire us and resell the work to their own client.
+        Both are normal, and neither is a compromise.
+      </p>
+    </div>
+
+    <div class="track-grid">
+      <article class="track">
+        <div class="track-head">
+          <span class="pc-num" style="--pc:var(--p1);--pc-wash:var(--p1-wash)">01</span>
+          <div>
+            <h3>{direct.who}</h3>
+            <p class="track-sub">{direct.sub}</p>
+          </div>
+        </div>
+        <ul class="track-list">
+          {direct.points.map(p => <li>{p}</li>)}
+        </ul>
+        <a class="link" href="/contact/#form">{direct.cta} <span aria-hidden="true">→</span></a>
+      </article>
+
+      <article class="track track--partner">
+        <div class="track-head">
+          <span class="pc-num" style="--pc:var(--p2);--pc-wash:var(--p2-wash)">02</span>
+          <div>
+            <h3>{viaMsp.who}</h3>
+            <p class="track-sub">{viaMsp.sub}</p>
+          </div>
+        </div>
+        <ul class="track-list">
+          {viaMsp.points.map(p => <li>{p}</li>)}
+        </ul>
+        <p class="track-margin">
+          <b>Resell at our published price and keep {margin}.</b>
+          Wholesale is {rate}% of list, on every engagement on the site.
+        </p>
+        <a class="link" href="/partner/">{viaMsp.cta} <span aria-hidden="true">→</span></a>
+      </article>
+    </div>
+
+    <div class="owner-note">
+      <span class="label" style="color:var(--accent-ink)">How white-label works here</span>
+      <span>
+        We never contact your client, never appear on your invoice to them, and never
+        hold credentials we cannot revoke. Access is granted in the client's own account
+        under least privilege, and every artefact carries your name. If a delivery
+        problem arises, it is your conversation to have — which is why we agree the
+        escalation path before work starts.
+      </span>
+    </div>
+  </div>
+</section>

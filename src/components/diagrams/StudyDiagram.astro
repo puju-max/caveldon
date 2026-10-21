@@ -1,0 +1,10 @@
+---
+import CloudPlatform from './CloudPlatform.astro';
+import GovernanceEvidence from './GovernanceEvidence.astro';
+import CostReliability from './CostReliability.astro';
+interface Props { slug: string; label: string; }
+const { slug, label } = Astro.props;
+---
+{slug === 'cloud-production-architecture' && <CloudPlatform label={label} />}
+{slug === 'governance-control-evidence' && <GovernanceEvidence label={label} />}
+{slug === 'cost-reliability-engineering' && <CostReliability label={label} />}

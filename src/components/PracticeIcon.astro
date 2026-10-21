@@ -1,0 +1,41 @@
+---
+/**
+ * Practice icon — an inline SVG glyph, drawn in the current practice colour.
+ * Hand-drawn in the same technical line style as the diagrams: strokes, no fills,
+ * no gradients. One per service family, so colour becomes wayfinding.
+ */
+export type Practice = 1 | 2 | 3 | 4;
+
+interface Props {
+  practice: Practice;
+  size?: number;
+  class?: string;
+}
+const { practice, size = 44, class: className = '' } = Astro.props;
+
+const paths: Record<Practice, string> = {
+  // 1 — Cloud & platform: a platform edge with two zones and a route.
+  1: 'M6 30h36M10 30V14h10v16M26 30V14h10v16M6 14h30M6 22h30M15 14v16M31 14v16',
+  // 2 — Security & governance: a shield with a checked control line.
+  2: 'M21 6l13 5v10c0 8-6 12-13 15-7-3-13-7V11l13-5zM15 21l4 4 8-9',
+  // 3 — Managed infrastructure: a rack with a schedule tick.
+  3: 'M8 10h28v22H8zM8 17h28M8 24h28M13 13.5h.01M13 20.5h.01M13 27.5h.01M32 20l4 4 7-8',
+  // 4 — Reliability & cost: a trend line with a budget band.
+  4: 'M6 30l9-9 7 5 10-12M32 14h5v5M6 36h32M6 22h32',
+};
+---
+
+<svg
+  class={`pc-chip ${className}`}
+  width={size}
+  height={size}
+  viewBox="0 0 42 42"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.4"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  <path d={paths[practice]} />
+</svg>

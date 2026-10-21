@@ -1,0 +1,102 @@
+---
+/**
+ * "How we work" — a scannable, expandable sequence.
+ *
+ * The brief: more content that is readable and scannable, where a reader who does
+ * not want to read is not forced to scroll past it, and a reader who does want
+ * depth can open it without losing their place.
+ *
+ * Pattern: a short scannable summary is always visible; the detail sits behind a
+ * disclosure that expands in place. Nothing is hidden from a crawler or a screen
+ * reader — <details> is native, keyboard accessible, and searchable.
+ */
+const steps = [
+  {
+    n: '01',
+    title: 'You describe the situation',
+    time: 'One call',
+    summary: 'No pitch, no discovery script. Tell us what is broken, what is changing, or what is coming.',
+    detail: [
+      'Send anything — a paragraph, a screenshot, a link to a ticket. We will work out whether this is an infrastructure problem, a security problem, a delivery problem, or a cost problem.',
+      'If it is none of those, we will say so and point you at the kind of person who can help. That happens regularly and it is not a sales tactic.',
+      'We will ask for credentials at this point for nothing. Nothing is needed until there is a scoped, paid piece of work.',
+    ],
+  },
+  {
+    n: '02',
+    title: 'We scope it in writing',
+    time: 'Usually same day',
+    summary: 'What we will do, what it costs, what it does not cover, and what you get at the end.',
+    detail: [
+      'A fixed scope and a fixed price. Where the scope genuinely cannot be known in advance, we say so and propose a small paid first step instead of a large open-ended estimate.',
+      'The scope names the owner on both sides, the environments in and out, the access we need, and the handover arrangements.',
+      'If the fixed price is wrong, it is wrong in our favour, not yours. We adjust it before we start.',
+    ],
+  },
+  {
+    n: '03',
+    title: 'We do the work, and we show you',
+    time: '1–3 weeks typical',
+    summary: 'Week one is read-only. We look before we touch anything, then we fix what actually matters.',
+    detail: [
+      'The first pass is observation: current state, what is exposed, what is fragile, what is expensive. No production changes during this phase.',
+      'Then the work, in small reviewable steps, each one safe to reverse.',
+      'You see the working as it happens, not a report at the end. If we get it wrong you will see it while it is still cheap to fix.',
+    ],
+  },
+  {
+    n: '04',
+    title: 'We hand it over properly',
+    time: 'Every time',
+    summary: 'Documented, owned by you, and maintainable by your team. That is the point of the engagement.',
+    detail: [
+      'Written runbooks, architecture decisions with their reasons, and an inventory of what exists and who owns it.',
+      'Access handed over to named people in your accounts, with roles that match the work — not one shared administrator.',
+      'A recorded walkthrough of the running system. We would rather be re-hired for the next thing than be required for this one.',
+    ],
+  },
+];
+---
+
+<section class="section" id="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">How we work</p>
+        <h2 id="how-title">Four steps, and you can stop at any of them.</h2>
+      </div>
+      <p class="intro">Each step is expandable. Read the summary to get the shape of it, or open the detail if you want the specifics.</p>
+    </div>
+
+    <ol class="how-list">
+      {steps.map(s => (
+        <li class="how-item">
+          <span class="how-num">{s.n}</span>
+          <div class="how-body">
+            <div class="how-head">
+              <h3>{s.title}</h3>
+              <span class="how-time">{s.time}</span>
+            </div>
+            <p class="how-summary">{s.summary}</p>
+            <details class="how-detail">
+              <summary>
+                <span class="how-detail-label">What this actually involves</span>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 5.5L7 9.5L11 5.5" />
+                </svg>
+              </summary>
+              <ul>
+                {s.detail.map(d => <li>{d}</li>)}
+              </ul>
+            </details>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <div class="owner-note">
+      <span class="label" style="color:var(--accent-ink)">No lock-in</span>
+      <span>We aim for documented work, clear access ownership and an agreed handover so your team can maintain its systems.</span>
+    </div>
+  </div>
+</section>

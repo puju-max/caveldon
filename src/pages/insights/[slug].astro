@@ -1,0 +1,81 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBlock from '../../components/CtaBlock.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { visibleInsights, categoryLabels } from '../../lib/content';
+import Fill from '../../components/Fill.astro';
+import { site, isLive } from '../../data/site';
+import { abs, breadcrumbSchema } from '../../lib/schema';
+
+export const getStaticPaths = (async () => {
+  const posts = await visibleInsights();
+  return posts.map(post => ({ params: { slug: post.id }, props: { post } }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const author = d.author || site.founder.name;
+const fmt = (date?: Date) => date?.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const iso = (date?: Date) => date?.toISOString().slice(0, 10);
+const path = `/insights/${post.id}/`;
+const article = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: d.title,
+  description: d.description,
+  mainEntityOfPage: abs(path),
+  image: abs('/og.png'),
+  keywords: d.tags.join(', '),
+  ...(d.pubDate ? { datePublished: iso(d.pubDate) } : {}),
+  ...(d.updated || d.pubDate ? { dateModified: iso(d.updated || d.pubDate) } : {}),
+  author: author
+    ? { '@type': 'Person', name: author, ...(site.founder.linkedin && !d.author ? { url: site.founder.linkedin } : {}) }
+    : { '@type': 'Organization', name: site.name },
+  publisher: { '@type': 'Organization', name: site.name, logo: { '@type': 'ImageObject', url: abs('/assets/favicon.svg') } },
+};
+---
+<BaseLayout title={d.title} description={d.description} article>
+  <JsonLd data={[article, breadcrumbSchema([{ name: 'Insights', path: '/insights/' }, { name: d.title, path }])]} />
+  <section class="page-hero gridpaper">
+    <div class="wrap narrow">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/insights/">Insights</a></nav>
+      <p class="eyebrow">{categoryLabels[d.category]}</p>
+      <h1 style="font-size:clamp(34px,4.6vw,54px);max-width:22ch">{d.title}</h1>
+      <p class="lead">{d.description}</p>
+      <div class="article-meta" style="margin-top:24px">
+        {(author || !isLive) && <span>By <Fill value={author} label="Your name" /></span>}
+        {d.pubDate && <span>Published <time datetime={iso(d.pubDate)}>{fmt(d.pubDate)}</time></span>}
+        {d.updated && <span>Updated <time datetime={iso(d.updated)}>{fmt(d.updated)}</time></span>}
+        <span>{d.readMinutes} min read</span>
+        {d.draft && <span class="draft-badge">Draft · not yet published</span>}
+      </div>
+    </div>
+  </section>
+  <section class="section" aria-label="Article">
+    <div class="wrap narrow">
+      <article class="prose"><Content /></article>
+      <nav class="article-foot" aria-label="Article navigation">
+        <a class="link" href="/insights/">← All guides</a>
+        <a class="link" href="/soc-2/">SOC 2 on AWS, explained →</a>
+      </nav>
+      {d.syndicatedTo.length > 0 && (
+        <aside class="syndicated" aria-label="Where else this guide is published">
+          <span class="label">Also published on</span>
+          <ul>
+            {d.syndicatedTo.map(s => (
+              <li><a class="link" href={s.url} rel="noopener" target="_blank">{s.name}</a></li>
+            ))}
+          </ul>
+          <p class="syndicated-note">
+            This page is the original. Every other copy links back here, so the
+            content stays in one place and you can check whether it has changed.
+          </p>
+        </aside>
+      )}
+    </div>
+  </section>
+  <CtaBlock title="Want a second pair of eyes on your setup?" />
+</BaseLayout>

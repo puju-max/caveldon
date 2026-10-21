@@ -1,0 +1,39 @@
+---
+interface Props { label: string; }
+const { label } = Astro.props;
+const steps = [
+  ['01 · DEFINE', 'Control', 'scope', 'what applies'],
+  ['02 · ENFORCE', 'Policy', 'guardrails', 'configurations'],
+  ['03 · DETECT', 'Findings', '& events', 'drift checks'],
+  ['04 · RETAIN', 'Evidence', 'records', 'reviews · logs'],
+  ['05 · IMPROVE', 'Owner', '+ fix', 'exceptions tracked'],
+];
+const x = (i: number) => 4 + i * 146;
+---
+<svg class="diag" viewBox="0 0 720 384" role="img" aria-label={label}>
+  <defs>
+    <marker id="ge-ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" style="fill:var(--ink)"/></marker>
+    <marker id="ge-ahA" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" style="fill:var(--accent)"/></marker>
+  </defs>
+  {steps.map((s, i) => (
+    <g>
+      <rect class={i === 3 ? 'box-hl' : 'box'} x={x(i)} y="36" width="128" height="104"/>
+      <text class="t-label" x={x(i) + 12} y="58">{s[0]}</text>
+      <text class="t-title" x={x(i) + 12} y="84">{s[1]}</text>
+      <text class="t-title" x={x(i) + 12} y="102">{s[2]}</text>
+      <text class="t-sub" x={x(i) + 12} y="126">{s[3]}</text>
+      {i < 4 && <path class="ln" d={`M${x(i) + 128} 88H${x(i + 1) - 3}`} marker-end="url(#ge-ah)"/>}
+    </g>
+  ))}
+  <path class="acc-dash" d="M652 140V164H68V145" marker-end="url(#ge-ahA)"/>
+  <text class="t-label" x="360" y="184" text-anchor="middle">REPEAT EVERY REVIEW CYCLE</text>
+
+  <rect class="box" x="4" y="210" width="712" height="168"/>
+  <text class="t-label" x="24" y="238">EVIDENCE YOU CAN SHOW A REVIEWER OR AUDITOR</text>
+  <path class="ln" d="M24 252H696" style="stroke:var(--line-2)"/>
+  <path class="ln" d="M244 268V334M484 268V334" style="stroke:var(--line-2)"/>
+  <text class="t-title" x="24" y="288">Access reviews</text><text class="t-sub" x="24" y="310">roles · approvals · removals</text>
+  <text class="t-title" x="264" y="288">Configuration history</text><text class="t-sub" x="264" y="310">findings · change events</text>
+  <text class="t-title" x="504" y="288">Keys &amp; backups</text><text class="t-sub" x="504" y="310">settings · owners · tests</text>
+  <text class="t-sub" x="24" y="360">Retention, completeness and ownership are checked for each environment.</text>
+</svg>

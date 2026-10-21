@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { breadcrumbSchema } from '../../lib/schema';
+---
+<BaseLayout title="Legal Notice" description="CAVELDON website terms, professional boundaries, evidence labels and intellectual-property information.">
+  <JsonLd data={breadcrumbSchema([{ name: 'Legal', path: '/legal/' }])} />
+  <section class="page-hero gridpaper">
+    <div class="wrap narrow">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Legal</span></nav>
+      <p class="eyebrow">Legal</p>
+      <h1>Website and professional notice.</h1>
+      <p class="lead">The website explains CAVELDON’s proposed engineering services and technical thinking. It does not create an engagement or replace advice based on your specific circumstances.</p>
+      <p class="status" style="margin-top:22px">Last updated · 14 October 2026</p>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Legal notice">
+    <div class="wrap narrow prose">
+      <h2>No engagement without written agreement</h2>
+      <p>Submitting an inquiry, booking a conversation, or reading this website does not create a client relationship. Project scope, responsibilities, deliverables, fees, timing, confidentiality, data handling and support terms must be agreed in writing before work begins.</p>
+
+      <h2>Technical information, not legal or audit advice</h2>
+      <p>Website material is general engineering information. It is not legal, tax, financial, regulatory or independent audit advice. CAVELDON may support technical controls and evidence preparation, but does not issue SOC 2 reports, certifications, legal opinions or regulatory approvals. Qualified advisers and independent assessors remain responsible for those services.</p>
+
+      <h2>Evidence and experience labels</h2>
+      <p>CAVELDON is a new engineering practice. Published work is separated into three categories: client work delivered through CAVELDON, prior professional experience gained before CAVELDON, and Engineering Lab reference designs. A reference design is not represented as a deployed customer system. Prior employment experience is not represented as a CAVELDON engagement.</p>
+
+      <h2>No guaranteed outcome</h2>
+      <p>Architecture, security, reliability, compliance readiness, migration and cost outcomes depend on system context, implementation, operating practices, provider behavior and customer decisions. Examples, estimates and proposed controls are not guarantees. Any commitment must appear in the applicable written agreement.</p>
+
+      <h2>Accuracy and availability</h2>
+      <p>CAVELDON aims to keep website material accurate and clearly qualified, but cloud services, standards and regulations change. Content may be corrected, updated or removed without notice. The website may occasionally be unavailable and is provided without a promise of uninterrupted access.</p>
+
+      <h2>Intellectual property</h2>
+      <p>Unless stated otherwise, CAVELDON owns the website copy, original diagrams, reference designs and visual presentation. You may link to public pages and quote short extracts with attribution. Republishing substantial material, removing attribution or presenting CAVELDON material as your own requires permission.</p>
+
+      <h2>Third-party names and links</h2>
+      <p>AWS, Amazon Web Services, Microsoft Azure, Cloudflare and other names belong to their respective owners. Their appearance describes relevant platforms or services and does not imply endorsement or partnership. External links are provided for convenience; third-party sites apply their own terms and policies.</p>
+
+      <h2>Privacy and contact</h2>
+      <p>Personal information is handled as described in the <a href="/privacy/">Privacy notice</a>. Questions about this notice can be sent through the <a href="/contact/">Contact page</a>.</p>
+    </div>
+  </section>
+</BaseLayout>

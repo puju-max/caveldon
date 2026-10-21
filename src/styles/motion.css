@@ -1,0 +1,101 @@
+/* CAVELDON · motion layer
+   ------------------------------------------------------------------
+   Scroll-triggered reveal, text plotted in like a drawing, and diagrams
+   that draw their own lines. Everything here is additive: the page is
+   complete and readable with JS disabled, and every animation is
+   skipped when the visitor asks for reduced motion.
+
+   The `js` class is set by an inline script in <head>, so the hidden
+   start state is only ever applied when scripting can actually finish
+   the reveal. If site.js fails to load, the inline fallback removes the
+   class after 2.5s and the content simply appears. */
+
+.js [data-reveal] { opacity: 0; transform: translate3d(0, 14px, 0); }
+.js [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+  transition: opacity .68s var(--ease), transform .68s var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/* Masked word reveal: each word rides up from behind its own clip. */
+.js [data-words] .w { display: inline-block; overflow: hidden; vertical-align: bottom; }
+.js [data-words] .w > .wi {
+  display: inline-block;
+  transform: translate3d(0, 105%, 0);
+  will-change: transform;
+}
+.js [data-words].is-revealed .w > .wi {
+  transform: none;
+  transition: transform .78s var(--ease);
+  transition-delay: var(--word-delay, 0ms);
+}
+/* Descenders (g, y, p) get clipped by the mask without this. */
+.js [data-words] .w { padding-bottom: .14em; margin-bottom: -.14em; }
+
+/* Hairline rules that draw themselves under an eyebrow or a heading. */
+.js .draw-line { transform: scaleX(0); transform-origin: left center; }
+.js .draw-line.is-revealed { transform: scaleX(1); transition: transform .9s var(--ease); }
+
+/* Diagrams: every stroke is drawn, in order, like a plotter. */
+.js .diag path.ln,
+.js .diag path.acc,
+.js .diag path.acc-dash,
+.js .diag path.dash,
+.js .diag path.group {
+  stroke-dasharray: var(--len, 1200);
+  stroke-dashoffset: var(--len, 1200);
+}
+.js .diag.is-drawn path.ln,
+.js .diag.is-drawn path.acc,
+.js .diag.is-drawn path.acc-dash,
+.js .diag.is-drawn path.dash,
+.js .diag.is-drawn path.group {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.15s var(--ease);
+  transition-delay: var(--draw-delay, 0ms);
+}
+/* Fills and dots land after the lines that frame them. */
+.js .diag .box, .js .diag .box-hl, .js .diag .dot, .js .diag .mask {
+  opacity: 0;
+}
+.js .diag.is-drawn .box, .js .diag.is-drawn .box-hl, .js .diag.is-drawn .dot, .js .diag.is-drawn .mask {
+  opacity: 1;
+  transition: opacity .45s ease;
+  transition-delay: var(--fill-delay, 600ms);
+}
+
+/* The brand signature in the services hero. */
+.js .service-overview-hero::after { opacity: 0; }
+.js .service-overview-hero.is-revealed::after { opacity: .035; transition: opacity 1.4s ease .3s; }
+
+/* A thin rule that wipes across the top of a section as it arrives. */
+.js .section::before, .js .section::after { opacity: 0; }
+.js .section.is-revealed::before, .js .section.is-revealed::after {
+  opacity: 1;
+  transition: opacity .5s ease;
+}
+
+/* Focus ring: crisp, and never clipped by the word mask. */
+.js [data-words] .w > .wi { transition-property: transform; }
+
+/* Once revealed, drop the hints that keep the compositor busy. */
+.js .is-revealed { will-change: auto; }
+.js [data-words].is-revealed .wi { will-change: auto; }
+
+/* Honour the visitor's request. */
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal],
+  .js [data-reveal].is-revealed { opacity: 1 !important; transform: none !important; }
+  .js [data-words] .w > .wi,
+  .js [data-words].is-revealed .w > .wi { transform: none !important; }
+  .js .draw-line, .js .draw-line.is-revealed { transform: none !important; }
+  .js .diag path.ln, .js .diag path.acc, .js .diag path.acc-dash,
+  .js .diag path.dash, .js .diag path.group,
+  .js .diag.is-drawn path.ln, .js .diag.is-drawn path.acc,
+  .js .diag.is-drawn path.acc-dash, .js .diag.is-drawn path.dash,
+  .js .diag.is-drawn path.group { stroke-dashoffset: 0 !important; transition: none !important; }
+  .js .diag .box, .js .diag .box-hl, .js .diag .dot, .js .diag .mask { opacity: 1 !important; }
+  .js .service-overview-hero::after { opacity: .035 !important; }
+  .js .section::before, .js .section::after { opacity: 1 !important; }
+}
